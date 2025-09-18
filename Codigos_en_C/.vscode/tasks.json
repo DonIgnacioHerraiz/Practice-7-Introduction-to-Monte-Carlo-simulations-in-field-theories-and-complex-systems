@@ -1,0 +1,27 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "compilar programa en C",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "Codigos_en_C\\prueba.c",
+                "-o",
+                "Codigos_en_C\\prueba.exe"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "ejecutar programa en C",
+            "type": "shell",
+            "command": ".\\Codigos_en_C\\prueba.exe",
+            "group": "test"
+        }
+    ]
+}
+
