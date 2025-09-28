@@ -6,9 +6,17 @@
             "type": "shell",
             "command": "gcc",
             "args": [
-                "Codigos_en_C\\prueba.c",
+                "Codigos_en_C\\funciones_dinamica.c",
+                "Codigos_en_C\\funciones_red.c",
+                "Codigos_en_C\\random.c",
+                "Codigos_en_C\\pruebas.c",
                 "-o",
-                "Codigos_en_C\\prueba.exe"
+                "Codigos_en_C\\prueba.exe",
+                "-lm",
+                ";",
+                "compilado, corriendo...",
+                ";",
+                ".\\Codigos_en_C\\prueba.exe"
             ],
             "group": {
                 "kind": "build",

@@ -1,0 +1,328 @@
+#include "funciones_red.h"
+
+// Definición de los arrays globales
+int xp[L];
+int yp[L];
+int zp[L];
+int xm[L];
+int ym[L];
+int zm[L];
+
+
+void inicializa_vectores_de_vecinos(void) {
+
+    for(int i = 0; i < L-1; i++) {
+        xp[i] = 1;
+        yp[i] = L;
+        xm[i+1] = -1;
+        ym[i+1] = -L;
+        zp[i] = L*L;
+        zm[i+1] = -L*L;
+    }
+
+    xp[L-1] = -(L-1);
+    yp[L-1] = -L*(L-1);
+    xm[0] = L-1;
+    zp[L-1] = -L*L*(L-1);
+    ym[0] = L*(L-1);
+    zm[0] = L*L*(L-1);
+}
+
+int plaqueta_xy(int Nodo, int *aristas){
+    int x, y, z;
+    coordenadas_nodo(Nodo, &x, &y, &z);
+    int s_nx = aristas[3*Nodo];
+    int s_ny = aristas[3*Nodo+1];
+    int s_n_mas_x_y = aristas[3*(Nodo + xp[x]) + 1];
+    int s_n_mas_y_x = aristas[3*(Nodo + yp[y])];
+    return s_nx * s_n_mas_x_y * s_ny * s_n_mas_y_x;
+}
+
+int plaqueta_xz(int Nodo, int *aristas){
+    int x, y, z;
+    coordenadas_nodo(Nodo, &x, &y, &z);
+    int s_nx = aristas[3*Nodo];
+    int s_nz = aristas[3*Nodo+2];
+    int s_n_mas_x_z = aristas[3*(Nodo + xp[x]) + 2];
+    int s_n_mas_z_x = aristas[3*(Nodo + zp[z])];
+    return s_nx * s_n_mas_x_z * s_nz * s_n_mas_z_x;
+}
+
+int plaqueta_yz(int Nodo, int *aristas){
+    int x, y, z;
+    coordenadas_nodo(Nodo, &x, &y, &z);
+    int s_ny = aristas[3*Nodo+1];
+    int s_nz = aristas[3*Nodo+2];
+    int s_n_mas_y_z = aristas[3*(Nodo + yp[y]) + 2];
+    int s_n_mas_z_y = aristas[3*(Nodo + zp[z]) + 1];
+    return s_ny * s_n_mas_y_z * s_nz * s_n_mas_z_y;
+}
+
+void dame_plaquetas(int *aristas, int *plaquetas){
+    int V=L*L*L;
+    for(int i=0;i<V;i++){
+        plaquetas[3*i]=plaqueta_xy(i,aristas);
+        plaquetas[3*i+1]=plaqueta_xz(i,aristas);
+        plaquetas[3*i+2]=plaqueta_yz(i,aristas);
+    }
+}
+
+void coordenadas_nodo(int Nodo, int *x, int *y, int *z){
+    *z = Nodo/(L*L);
+    *y = (Nodo - (*z)*L*L)/L;
+    *x = Nodo - (*z)*L*L - (*y)*L;
+}
+
+int energia_normalizada(int *plaquetas){
+    int V=L*L*L;
+    int suma=0;
+    for(int i=0;i<V;i++){
+        suma=suma+plaquetas[3*i]+plaquetas[3*i+1]+plaquetas[3*i+2];
+    }
+    return -suma;
+}
+
+int magnetizacion(int *aristas){
+    int V=3*L*L*L;
+    int suma=0;
+    for(int i=0;i<V;i++){
+        suma=suma+aristas[i];
+    }
+    return suma;
+}
+
+int vecino_n_xp(int Nodo, int n){
+    for(int i=0;i<n;i++){
+        Nodo=Nodo+xp[Nodo];
+    }
+    return Nodo;
+}
+
+int vecino_n_yp(int Nodo, int n){
+    for(int i=0;i<n;i++){
+        Nodo=Nodo+yp[Nodo];
+    }
+    return Nodo;
+}
+
+int vecino_n_zp(int Nodo, int n){
+    for(int i=0;i<n;i++){
+        Nodo=Nodo+yp[Nodo];
+    }
+    return Nodo;
+}
+
+double una_fila_x_loop_z(int Nodo_inicial, int *aristas, int n){
+    int N_loops=0;
+    int suma=0;
+    int comienzo=0;
+    int desplazamiento=0;
+    int Nodo_actual=Nodo_inicial;
+    while (comienzo<n){
+        desplazamiento=comienzo;
+        while(desplazamiento<L-1){
+            desplazamiento=desplazamiento+n;
+            suma=suma+un_loop_z(Nodo_actual,aristas,n);
+            Nodo_actual=vecino_n_xp(Nodo_actual,n-1);
+            N_loops++;
+        }
+        comienzo++;
+    }
+    return (double)suma/N_loops;
+}   
+
+double una_fila_y_loop_x(int Nodo_inicial, int *aristas, int n){
+    int N_loops=0;
+    int suma=0;
+    int comienzo=0;
+    int desplazamiento=0;
+    int Nodo_actual=Nodo_inicial;
+    while (comienzo<n){
+        desplazamiento=comienzo;
+        while(desplazamiento<L-1){
+            desplazamiento=desplazamiento+n;
+            suma=suma+un_loop_x(Nodo_actual,aristas,n);
+            Nodo_actual=vecino_n_yp(Nodo_actual,n-1);
+            N_loops++;
+        }
+        comienzo++;
+    }
+    return (double)suma/N_loops;
+}  
+
+int Wilson_loop_x(int Nodo_inicial, int *aristas, int n){
+
+    int N_loops=0;
+    double suma=0;
+    int comienzo=0;
+    int desplazamiento=0;
+    int Nodo_actual=Nodo_inicial;
+    while (comienzo<n){
+        desplazamiento=comienzo;
+        while(desplazamiento<L-1){
+            desplazamiento=desplazamiento+n;
+            suma=suma+una_fila_y_loop_x(Nodo_actual,aristas,n);
+            Nodo_actual=vecino_n_zp(Nodo_actual,n-1);
+            N_loops++;
+        }
+        comienzo++;
+    }
+    return suma/N_loops;
+}   
+
+double una_fila_z_loop_y(int Nodo_inicial, int *aristas, int n){
+    int N_loops=0;
+    int suma=0;
+    int comienzo=0;
+    int desplazamiento=0;
+    int Nodo_actual=Nodo_inicial;
+    while (comienzo<n){
+        desplazamiento=comienzo;
+        while(desplazamiento<L-1){
+            desplazamiento=desplazamiento+n;
+            suma=suma+un_loop_y(Nodo_actual,aristas,n);
+            Nodo_actual=vecino_n_zp(Nodo_actual,n-1);
+            N_loops++;
+        }
+        comienzo++;
+    }
+    return (double)suma/N_loops;
+}  
+
+int Wilson_loop_y(int Nodo_inicial, int *aristas, int n){
+
+    int N_loops=0;
+    double suma=0;
+    int comienzo=0;
+    int desplazamiento=0;
+    int Nodo_actual=Nodo_inicial;
+    while (comienzo<n){
+        desplazamiento=comienzo;
+        while(desplazamiento<L-1){
+            desplazamiento=desplazamiento+n;
+            suma=suma+una_fila_z_loop_y(Nodo_actual,aristas,n);
+            Nodo_actual=vecino_n_xp(Nodo_actual,n-1);
+            N_loops++;
+        }
+        comienzo++;
+    }
+    return suma/N_loops;
+}   
+
+
+
+
+
+int Wilson_loop_z(int Nodo_inicial, int *aristas, int n){
+
+    int N_loops=0;
+    double suma=0;
+    int comienzo=0;
+    int desplazamiento=0;
+    int Nodo_actual=Nodo_inicial;
+    while (comienzo<n){
+        desplazamiento=comienzo;
+        while(desplazamiento<L-1){
+            desplazamiento=desplazamiento+n;
+            suma=suma+una_fila_x_loop_z(Nodo_actual,aristas,n);
+            Nodo_actual=vecino_n_yp(Nodo_actual,n-1);
+            N_loops++;
+        }
+        comienzo++;
+    }
+    return suma/N_loops;
+}   
+
+
+
+
+int un_loop_z(int Nodo_inicial, int *arista, int n){
+    int lado_sur=1;
+    int lado_oeste=1;
+    int Nodo_sur=Nodo_inicial;
+    int Nodo_oeste=Nodo_inicial;
+    for(int i=0;i<n;i++){
+        lado_sur=lado_sur*arista[3*(Nodo_sur)];
+        lado_oeste=lado_oeste*arista[3*(Nodo_oeste)+1];
+        Nodo_sur=Nodo_sur+xp[Nodo_sur];
+        Nodo_oeste=Nodo_oeste+yp[Nodo_oeste];
+    }
+    int lado_norte=1;
+    int lado_este=1;
+    int Nodo_norte=Nodo_oeste;
+    int Nodo_este=Nodo_sur;
+
+    for(int i=0;i<n;i++){
+        lado_norte=lado_norte*arista[3*(Nodo_norte)];
+        lado_este=lado_este*arista[3*(Nodo_este)+1];
+        Nodo_norte=Nodo_norte+xp[Nodo_norte];
+        Nodo_este=Nodo_este+yp[Nodo_este];
+    }
+    return lado_sur*lado_oeste*lado_norte*lado_este;
+}
+
+int un_loop_y(int Nodo_inicial, int *arista, int n){
+    int lado_sur=1;
+    int lado_oeste=1;
+    int Nodo_sur=Nodo_inicial;
+    int Nodo_oeste=Nodo_inicial;
+    for(int i=0;i<n;i++){
+        lado_sur=lado_sur*arista[3*(Nodo_sur)+2];
+        lado_oeste=lado_oeste*arista[3*(Nodo_oeste)];
+        Nodo_sur=Nodo_sur+zp[Nodo_sur];
+        Nodo_oeste=Nodo_oeste+xp[Nodo_oeste];
+    }
+    int lado_norte=1;
+    int lado_este=1;
+    int Nodo_norte=Nodo_oeste;
+    int Nodo_este=Nodo_sur;
+
+    for(int i=0;i<n;i++){
+        lado_norte=lado_norte*arista[3*(Nodo_norte)+2];
+        lado_este=lado_este*arista[3*(Nodo_este)];
+        Nodo_norte=Nodo_norte+zp[Nodo_norte];
+        Nodo_este=Nodo_este+xp[Nodo_este];
+    }
+    return lado_sur*lado_oeste*lado_norte*lado_este;
+}
+
+int un_loop_x(int Nodo_inicial, int *arista, int n){
+    int lado_sur=1;
+    int lado_oeste=1;
+    int Nodo_sur=Nodo_inicial;
+    int Nodo_oeste=Nodo_inicial;
+    for(int i=0;i<n;i++){
+        lado_sur=lado_sur*arista[3*(Nodo_sur)+1];
+        lado_oeste=lado_oeste*arista[3*(Nodo_oeste)+2];
+        Nodo_sur=Nodo_sur+yp[Nodo_sur];
+        Nodo_oeste=Nodo_oeste+zp[Nodo_oeste];
+    }
+    int lado_norte=1;
+    int lado_este=1;
+    int Nodo_norte=Nodo_oeste;
+    int Nodo_este=Nodo_sur;
+
+    for(int i=0;i<n;i++){
+        lado_norte=lado_norte*arista[3*(Nodo_norte)+1];
+        lado_este=lado_este*arista[3*(Nodo_este)+2];
+        Nodo_norte=Nodo_norte+yp[Nodo_norte];
+        Nodo_este=Nodo_este+zp[Nodo_este];
+    }
+    return lado_sur*lado_oeste*lado_norte*lado_este;
+}
+
+double prom_Wilson_loops(int n, int *aristas){
+
+    int promedio=0;
+    int Nodo_actual_z=0;
+    int Nodo_actual_y=0;
+    int Nodo_actual_x=0;
+
+    for(int i=0;i<L-1;i++){
+        promedio=promedio+un_loop_z(Nodo_actual_z,aristas,n)+un_loop_z(Nodo_actual_y,aristas,n)+un_loop_z(Nodo_actual_x,aristas,n);
+        Nodo_actual_z=Nodo_actual_z+zp[Nodo_actual_z];
+        Nodo_actual_x=Nodo_actual_x+xp[Nodo_actual_x];
+        Nodo_actual_y=Nodo_actual_y+yp[Nodo_actual_y];
+    }
+    return promedio/(3*L);
+}
