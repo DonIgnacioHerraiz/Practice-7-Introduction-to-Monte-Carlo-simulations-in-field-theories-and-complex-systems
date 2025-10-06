@@ -12,3 +12,6 @@ double fran(void);
 
 // Inicializa el generador Parisi-Rapuano con una semilla
 void inicializa_PR(int SEMILLA);
+
+// Genera un número aleatorio en el rango [n1, n2)
+double generador_plano(double n1,double n2);

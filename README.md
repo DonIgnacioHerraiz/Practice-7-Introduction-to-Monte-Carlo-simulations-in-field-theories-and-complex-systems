@@ -54,7 +54,7 @@ funciones_dinamica.c: Aqui crearemos las funciones utilizadas en dinamica.c
 
 analisis.c: Aqui escribiremos el "main" con el que analizaremos las configuraciones creadas en dinamica.c
 
-funciones_analisis.c: obvio
+funciones_analisis.c: obvio   (͡° ͜ʖ ͡°)
 
 A continuación, os describo algunas de las funciones que YA se me han ocurrido escribir en cada fichero:
 
@@ -76,7 +76,6 @@ funciones_red:
 - int numero_nodo(int N, int x, int y, int z)
 - dame_plaquetas(int *nodos, int *plaquetas)
 -
-
 
 
 

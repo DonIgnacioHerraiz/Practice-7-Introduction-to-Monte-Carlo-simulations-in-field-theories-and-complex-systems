@@ -43,3 +43,8 @@ void inicializa_PR(int SEMILLA)
     }
     ind_ran=ig1=ig2=ig3=0;
 }
+
+
+double generador_plano(double n1,double n2){
+    return n1+(n2-n1)*fran();
+}

@@ -2,21 +2,17 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "compilar programa en C",
+            "label": "compilar programa de la ley del area",
             "type": "shell",
             "command": "gcc",
             "args": [
                 "Codigos_en_C\\funciones_dinamica.c",
                 "Codigos_en_C\\funciones_red.c",
                 "Codigos_en_C\\random.c",
-                "Codigos_en_C\\pruebas.c",
+                "Codigos_en_C\\ley_area.c",
                 "-o",
-                "Codigos_en_C\\prueba.exe",
-                "-lm",
-                ";",
-                "compilado, corriendo...",
-                ";",
-                ".\\Codigos_en_C\\prueba.exe"
+                "Codigos_en_C\\ley_area.exe",
+                "-lm"
             ],
             "group": {
                 "kind": "build",
@@ -25,9 +21,61 @@
             "problemMatcher": ["$gcc"]
         },
         {
-            "label": "ejecutar programa en C",
+            "label": "ejecutar programa ley del area",
             "type": "shell",
-            "command": ".\\Codigos_en_C\\prueba.exe",
+            "command": ".\\Codigos_en_C\\ley_area.exe",
+            "group": "test"
+        },
+        {
+            "label": "compilar test simetria ising-gauge",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-ICodigos_en_C",
+                "Codigos_en_C\\funciones_dinamica.c",
+                "Codigos_en_C\\funciones_red.c",
+                "Codigos_en_C\\random.c",
+                "TESTS\\simetria_gauge.c",
+                "-o",
+                "TESTS\\simetria_gauge.exe",
+                "-lm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "ejecutar test simetria ising-gauge",
+            "type": "shell",
+            "command": ".\\TESTS\\simetria_gauge.exe",
+            "group": "test"
+        },
+        {
+            "label": "compilar test vectores",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-ICodigos_en_C",
+                "Codigos_en_C\\funciones_dinamica.c",
+                "Codigos_en_C\\funciones_red.c",
+                "Codigos_en_C\\random.c",
+                "TESTS\\test_vectores.c",
+                "-o",
+                "TESTS\\test_vectores.exe",
+                "-lm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "ejecutar test vectores",
+            "type": "shell",
+            "command": ".\\TESTS\\test_vectores.exe",
             "group": "test"
         }
     ]
