@@ -77,6 +77,32 @@
             "type": "shell",
             "command": ".\\TESTS\\test_vectores.exe",
             "group": "test"
+        },
+        {
+            "label": "compilar test de temperatura infinita",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-ICodigos_en_C",
+                "Codigos_en_C\\funciones_dinamica.c",
+                "Codigos_en_C\\funciones_red.c",
+                "Codigos_en_C\\random.c",
+                "TESTS\\temperatura_infinita.c",
+                "-o",
+                "TESTS\\temperatura_infinita.exe",
+                "-lm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "ejecutar test de temperatura infinita",
+            "type": "shell",
+            "command": ".\\TESTS\\temperatura_infinita.exe",
+            "group": "test"
         }
     ]
 }

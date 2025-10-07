@@ -66,7 +66,7 @@ void crea_configuracionInicial( int flag, int *s){
     }
 
     switch( flag ){
-    case 0:
+    case 0: // ALEATORIA
         for( i=0; i<V; i++ ){
             r = fran();
             if( r<0.5 )s[i]=1;
@@ -74,7 +74,7 @@ void crea_configuracionInicial( int flag, int *s){
             }
         break;
 
-    case 1:
+    case 1: // TODAS IGUALES
         if( fran() < 0.5 ){
             for( i=0; i<V; i++ ){
                 s[i] = -1;
