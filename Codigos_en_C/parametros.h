@@ -1,5 +1,5 @@
 #pragma once
 
-#define L 4
-#define beta 0.72
+#define L 24
+#define beta 100
 #define J 1.0

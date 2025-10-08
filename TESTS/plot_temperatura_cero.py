@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 # Nombre del fichero
-fichero = "TESTS/temperatura_infinita.txt"
+fichero = "TESTS/temperatura_cero.txt"
 
 # Leer los números del fichero
 with open(fichero, "r") as f:

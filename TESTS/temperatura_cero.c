@@ -19,7 +19,7 @@ int main(){
     inicializa_vectores_de_vecinos();
 
     FILE* fout;
-    fout=fopen("TESTS/temperatura_infinita.txt","w");
+    fout=fopen("TESTS/temperatura_cero.txt","w");
     if(fout==NULL){
         printf("No se pudo crear el archivo temperatura_infinita.txt\n");
         return 1;
@@ -30,7 +30,7 @@ int main(){
  
     double probabilidades[5];
     vector_cociente_prob(probabilidades);
-    crea_configuracionInicial(1, s);
+    crea_configuracionInicial(0, s);
     dame_plaquetas(s, plaquetas);
 
     energia1=energia_normalizada(plaquetas);
@@ -44,11 +44,14 @@ int main(){
         N_pasos_metropolis(1, s, plaquetas, probabilidades, &aceptadas);
         energia2=energia_normalizada(plaquetas);
 
-        if((energia1-energia2)>1e-06){
-            printf("-------La energia no es estrictamente creciente------");
+        if((energia1-energia2)<0){
+            printf("-------La energia no es estrictamente decreciente------");
+            printf("La dif: %f",energia1-energia2);
             printf("\nEnergia antes del cambio: %f", energia1);
             printf("\nEnergia despues del cambio: %f", energia2);
             counter++;
+        }else if((energia1-energia2)!=4.0 && (energia1-energia2)!=8.0 && (energia1-energia2)!=0.0){
+            printf("La dif: %f",energia1-energia2);
         }
         energia1=energia2;
         fprintf(fout,"%f\n",energia1);

@@ -18,9 +18,9 @@ int main(){
     inicializa_vectores_de_vecinos();
     int n=10;
     int m=20000;
-    int n_pasos=5000000;
+    int n_pasos=500000;
     int n_pasos_entre_mediciones=1000;
-    int n_termalizacion=1000000;
+    int n_termalizacion=100000;
     int nodos_wilson[n][m][2];
 
     guarda_parametros(n, m, n_pasos, n_pasos_entre_mediciones, n_termalizacion);

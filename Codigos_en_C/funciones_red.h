@@ -27,7 +27,9 @@ void dame_plaquetas(int *aristas, int *plaquetas);
 
 void coordenadas_nodo(int Nodo, int *x, int *y, int *z);
 
-int energia_normalizada(int *plaquetas);
+double energia_normalizada(int *plaquetas);
+
+void desviacion_estandar(int n, double datos[], double *media, double *desviacion);
 
 int magnetizacion(int *aristas);
 

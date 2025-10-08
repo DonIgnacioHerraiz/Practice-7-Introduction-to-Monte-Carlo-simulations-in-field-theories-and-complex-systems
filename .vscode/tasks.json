@@ -79,7 +79,7 @@
             "group": "test"
         },
         {
-            "label": "compilar test de temperatura infinita",
+            "label": "compilar test de temperatura cero",
             "type": "shell",
             "command": "gcc",
             "args": [
@@ -87,9 +87,9 @@
                 "Codigos_en_C\\funciones_dinamica.c",
                 "Codigos_en_C\\funciones_red.c",
                 "Codigos_en_C\\random.c",
-                "TESTS\\temperatura_infinita.c",
+                "TESTS\\temperatura_cero.c",
                 "-o",
-                "TESTS\\temperatura_infinita.exe",
+                "TESTS\\temperatura_cero.exe",
                 "-lm"
             ],
             "group": {
@@ -99,9 +99,9 @@
             "problemMatcher": ["$gcc"]
         },
         {
-            "label": "ejecutar test de temperatura infinita",
+            "label": "ejecutar test de temperatura cero",
             "type": "shell",
-            "command": ".\\TESTS\\temperatura_infinita.exe",
+            "command": ".\\TESTS\\temperatura_cero.exe",
             "group": "test"
         },        {
             "label": "compilar test simetria ising-gauge PLAQUETAS",

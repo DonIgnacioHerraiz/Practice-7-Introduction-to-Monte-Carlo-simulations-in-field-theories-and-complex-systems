@@ -84,14 +84,31 @@ void coordenadas_nodo(int Nodo, int *x, int *y, int *z){
     *x = Nodo - (*z)*L*L - (*y)*L;
 }
 
-int energia_normalizada(int *plaquetas){
+double energia_normalizada(int *plaquetas){
     int V=L*L*L;
-    int suma=0;
+    double suma=0.0;
     for(int i=0;i<V;i++){
         suma=suma+plaquetas[3*i]+plaquetas[3*i+1]+plaquetas[3*i+2];
     }
-    return -suma;
+    return (-J*suma);
 }
+
+void desviacion_estandar(int n, double datos[], double *media, double *desviacion){
+    double suma=0.0;
+
+    for(int i=0;i<n;i++){
+        suma+=datos[i];
+    }
+    *media=suma/n;
+    suma=0.0;
+
+    
+    for(int i=0;i<n;i++){
+        suma+=(*media-datos[i])*(*media-datos[i]);
+    }
+    
+    *desviacion=sqrt(suma/n);
+}   
 
 int magnetizacion(int *aristas){
     int V=3*L*L*L;
