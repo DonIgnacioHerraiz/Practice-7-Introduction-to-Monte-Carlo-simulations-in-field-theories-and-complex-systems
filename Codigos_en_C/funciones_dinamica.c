@@ -124,8 +124,8 @@ int nodo_aleatorio(){
     return (int)(V*fran());
 }
 
-void cambio_aristas_nodo(int *s){
-    int nodo=15;
+int cambio_aristas_nodo(int *s){
+    int nodo=(int)(fran()*(L*L*L));
     
     s[3*nodo]*=-1;
     s[3*nodo+1]*=-1;
@@ -133,6 +133,7 @@ void cambio_aristas_nodo(int *s){
     s[3*(nodo+xm[nodo])]*=-1;
     s[3*(nodo+ym[nodo])+1]*=-1;
     s[3*(nodo+zm[nodo])+2]*=-1;
+    return nodo;
 }
 void posicion_plaquetas(int arista_aleatoria, int *posiciones){
     int Nodo = arista_aleatoria / 3;

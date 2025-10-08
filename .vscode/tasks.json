@@ -27,7 +27,7 @@
             "group": "test"
         },
         {
-            "label": "compilar test simetria ising-gauge",
+            "label": "compilar test simetria ising-gauge ENERGIA",
             "type": "shell",
             "command": "gcc",
             "args": [
@@ -35,9 +35,9 @@
                 "Codigos_en_C\\funciones_dinamica.c",
                 "Codigos_en_C\\funciones_red.c",
                 "Codigos_en_C\\random.c",
-                "TESTS\\simetria_gauge.c",
+                "TESTS\\simetria_gauge_energia.c",
                 "-o",
-                "TESTS\\simetria_gauge.exe",
+                "TESTS\\simetria_gauge_energia.exe",
                 "-lm"
             ],
             "group": {
@@ -47,9 +47,9 @@
             "problemMatcher": ["$gcc"]
         },
         {
-            "label": "ejecutar test simetria ising-gauge",
+            "label": "ejecutar test simetria ising-gauge ENERGIA",
             "type": "shell",
-            "command": ".\\TESTS\\simetria_gauge.exe",
+            "command": ".\\TESTS\\simetria_gauge_energia.exe",
             "group": "test"
         },
         {
@@ -103,7 +103,31 @@
             "type": "shell",
             "command": ".\\TESTS\\temperatura_infinita.exe",
             "group": "test"
-        }
+        },        {
+            "label": "compilar test simetria ising-gauge PLAQUETAS",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-ICodigos_en_C",
+                "Codigos_en_C\\funciones_dinamica.c",
+                "Codigos_en_C\\funciones_red.c",
+                "Codigos_en_C\\random.c",
+                "TESTS\\simetria_gauge_plaqueta.c",
+                "-o",
+                "TESTS\\simetria_gauge_plaqueta.exe",
+                "-lm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },{
+            "label": "ejecutar test simetria ising-gauge PLAQUETAS",
+            "type": "shell",
+            "command": ".\\TESTS\\simetria_gauge_plaqueta.exe",
+            "group": "test"
+        },
     ]
 }
 

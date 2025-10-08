@@ -20,7 +20,7 @@ void crea_configuracionInicial( int flag, int *s);
 void lee_configuracionInicial(int *s, char *input_file);
 int arista_aleatoria();
 int nodo_aleatorio();
-void cambio_aristas_nodo(int *s);
+int cambio_aristas_nodo(int *s);
 void posicion_plaquetas(int arista_aleatoria, int *posiciones);
 int indice_cociente_prob(int plaquetas[], int posiciones[]);
 void vector_cociente_prob(double *vector);
