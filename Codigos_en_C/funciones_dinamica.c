@@ -373,7 +373,7 @@ void calculo_promedios_wilson(int *s, int *plaquetas, int n, int m, int nodos_wi
 }
 
 void dinamica_metropolis(
-    int N_pasos_entre_med,
+    int N_sweeps_entre_med,
     int N_medidas,
     double probabilidades[5],
     int *aristas,
@@ -401,6 +401,7 @@ void dinamica_metropolis(
     char* folder_salida; 
     char* folder_final; 
     char* folder_param;
+    char *filename_param;
 
 #ifdef termalizacion
     if (beta == 0.72) {
@@ -479,7 +480,7 @@ void dinamica_metropolis(
     for (paso = 1; paso <= N_medidas; paso++) {
         // Tiempo de Metropolis
         inicio_metropolis = clock();
-        N_pasos_metropolis(N_pasos_entre_med, aristas, plaquetas, probabilidades, &aceptadas);
+        N_pasos_metropolis(N_sweeps_entre_med*V, aristas, plaquetas, probabilidades, &aceptadas);
         fin_metropolis = clock();
         tiempo_metropolis += (double)(fin_metropolis - inicio_metropolis) / CLOCKS_PER_SEC;
 
@@ -501,11 +502,11 @@ void dinamica_metropolis(
         inicio_io = clock();
 #ifdef correlacion
         fprintf(foutput, "%f\t%f\t%f\t%f\n",
-                paso * N_pasos_entre_med / ((double)V),
+                paso * N_sweeps_entre_med,
                 media_plaqueta, media_wilsons, mag);
 #else
         fprintf(foutput, "%f\t%f\t%f\t%f\n",
-                paso * N_pasos_entre_med / ((double)V),
+                paso * N_sweeps_entre_med,
                 media_plaqueta, media_wilsons, mag);
 #endif
         fin_io = clock();
@@ -653,4 +654,274 @@ void guarda_parametros(int n, int m, int n_pasos, int n_pasos_entre_mediciones, 
     printf("Archivo creado: %s\n", filename);
 
 
+}
+
+
+// -------------------------------------------------------------
+// Función auxiliar: calcula media y desviación estándar de la media
+// -------------------------------------------------------------
+void calcular_media_std(double *data, int start, int end, double *media, double *std) {
+    int n = end - start;
+    double sum = 0.0, sum2 = 0.0;
+    for (int i = start; i < end; i++) {
+        sum += data[i];
+        sum2 += data[i] * data[i];
+    }
+    *media = sum / n;
+    double var = (sum2 / n) - (*media) * (*media);
+    *std = sqrt(fabs(var) / n);
+}
+
+// -------------------------------------------------------------
+// Función 1: crea los ficheros ventana I_k.txt en carpeta VENTANAS/EVOLUCION
+// -------------------------------------------------------------
+void crear_ventanas(int k_ini, int k_final, int N_ventana) {
+    for (int k = k_ini; k <= k_final; k++) {
+        char input_path[512], output_path[512];
+        sprintf(input_path, "Resultados_simulacion/TERMALIZACION/0.72/EVOLUCION/I_%d.txt", k);
+        sprintf(output_path, "Resultados_simulacion/TERMALIZACION/0.72/VENTANAS/EVOLUCION/I_%d.txt", k);
+
+        FILE *fin = fopen(input_path, "r");
+        if (!fin) {
+            printf("No se pudo abrir %s\n", input_path);
+            continue;
+        }
+
+        // Primero contamos líneas
+        int n = 0;
+        char buffer[256];
+        while (fgets(buffer, sizeof(buffer), fin)) n++;
+        rewind(fin);
+
+        // Reservamos memoria
+        double *tiempo   = malloc(n * sizeof(double));
+        double *plaquetas = malloc(n * sizeof(double));
+        double *wilsons   = malloc(n * sizeof(double));
+        double *aristas   = malloc(n * sizeof(double));
+        if (!tiempo || !plaquetas || !wilsons || !aristas) {
+            printf("Error de memoria para %s\n", input_path);
+            fclose(fin);
+            free(tiempo); free(plaquetas); free(wilsons); free(aristas);
+            continue;
+        }
+
+        // Leemos los datos
+        int idx = 0;
+        while (fscanf(fin, "%lf %lf %lf %lf", &tiempo[idx], &plaquetas[idx],
+                      &wilsons[idx], &aristas[idx]) == 4)
+            idx++;
+        fclose(fin);
+
+        FILE *fout = fopen(output_path, "w");
+        if (!fout) {
+            printf("No se pudo crear %s\n", output_path);
+            free(tiempo); free(plaquetas); free(wilsons); free(aristas);
+            continue;
+        }
+
+        // Calculamos ventanas móviles
+        for (int i = 0; i + N_ventana <= idx; i++) {
+            double m_plaq, s_plaq, m_wil, s_wil, m_ari, s_ari;
+            calcular_media_std(plaquetas, i, i + N_ventana, &m_plaq, &s_plaq);
+            calcular_media_std(wilsons, i, i + N_ventana, &m_wil, &s_wil);
+            calcular_media_std(aristas, i, i + N_ventana, &m_ari, &s_ari);
+
+            fprintf(fout, "%.0f\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\n",
+                    tiempo[i + N_ventana - 1],
+                    m_plaq, s_plaq, m_wil, s_wil, m_ari, s_ari);
+        }
+
+        fclose(fout);
+        free(tiempo);
+        free(plaquetas);
+        free(wilsons);
+        free(aristas);
+
+        printf("Ventanas creadas: %s\n", output_path);
+    }
+}
+
+
+// -------------------------------------------------------------
+// Función 2: calcula media y desviación estándar global (entre configuraciones)
+// -------------------------------------------------------------
+void crear_media_global(int k_ini, int k_final) {
+    char output_path[512];
+    sprintf(output_path, "Resultados_simulacion/TERMALIZACION/0.72/VENTANAS/EVOLUCION/MEDIA_%d_%d.txt",
+            k_ini, k_final);
+
+    FILE *fout = fopen(output_path, "w");
+    if (!fout) {
+        printf("No se pudo crear %s\n", output_path);
+        return;
+    }
+
+    // Leemos el primer archivo para saber tamaño y tiempos
+    char first_path[512];
+    sprintf(first_path, "Resultados_simulacion/TERMALIZACION/0.72/VENTANAS/EVOLUCION/I_%d.txt", k_ini);
+    FILE *f0 = fopen(first_path, "r");
+    if (!f0) {
+        printf("No se pudo abrir %s\n", first_path);
+        fclose(fout);
+        return;
+    }
+
+    int n = 0;
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), f0)) n++;
+    rewind(f0);
+
+    double *tiempo = malloc(n * sizeof(double));
+    for (int i = 0; i < n; i++)
+        fscanf(f0, "%lf", &tiempo[i]);
+    fclose(f0);
+
+    // Reservamos arrays para medias por configuración
+    int num_conf = k_final - k_ini + 1;
+    double **plaq = malloc(num_conf * sizeof(double *));
+    double **wil  = malloc(num_conf * sizeof(double *));
+    double **ari  = malloc(num_conf * sizeof(double *));
+    for (int c = 0; c < num_conf; c++) {
+        plaq[c] = malloc(n * sizeof(double));
+        wil[c]  = malloc(n * sizeof(double));
+        ari[c]  = malloc(n * sizeof(double));
+    }
+
+    // Cargamos todos los archivos
+    for (int k = k_ini; k <= k_final; k++) {
+        char path[512];
+        sprintf(path, "Resultados_simulacion/TERMALIZACION/0.72/VENTANAS/EVOLUCION/I_%d.txt", k);
+        FILE *f = fopen(path, "r");
+        if (!f) continue;
+        int i = 0;
+        while (fscanf(f, "%*lf %lf %*lf %lf %*lf %lf %*lf", &plaq[k - k_ini][i], &wil[k - k_ini][i], &ari[k - k_ini][i]) == 3)
+            i++;
+        fclose(f);
+    }
+
+    // Calculamos media y desviación entre configuraciones
+    for (int i = 0; i < n; i++) {
+        double sumP = 0, sumW = 0, sumA = 0;
+        for (int c = 0; c < num_conf; c++) {
+            sumP += plaq[c][i];
+            sumW += wil[c][i];
+            sumA += ari[c][i];
+        }
+        double meanP = sumP / num_conf;
+        double meanW = sumW / num_conf;
+        double meanA = sumA / num_conf;
+
+        double varP = 0, varW = 0, varA = 0;
+        for (int c = 0; c < num_conf; c++) {
+            varP += (plaq[c][i] - meanP) * (plaq[c][i] - meanP);
+            varW += (wil[c][i]  - meanW) * (wil[c][i]  - meanW);
+            varA += (ari[c][i]  - meanA) * (ari[c][i]  - meanA);
+        }
+
+        double stdP = sqrt(varP / num_conf);
+        double stdW = sqrt(varW / num_conf);
+        double stdA = sqrt(varA / num_conf);
+
+        fprintf(fout, "%.0f\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\n",
+                tiempo[i], meanP, stdP, meanW, stdW, meanA, stdA);
+    }
+
+    fclose(fout);
+
+    // --------------------------------------------------------------------
+    // BLOQUE NUEVO: generación automática de COMPATIBILIDAD_k_ini_k_final
+    // --------------------------------------------------------------------
+    char compat_path[512];
+    sprintf(compat_path, "Resultados_simulacion/TERMALIZACION/0.72/VENTANAS/COMPATIBILIDAD_%d_%d.txt", k_ini, k_final);
+    FILE *fc = fopen(compat_path, "w");
+    if (!fc) {
+        printf("No se pudo crear %s\n", compat_path);
+        return;
+    }
+
+    // Leemos de nuevo las medias globales
+    double *Mpla = malloc(n * sizeof(double)), *Spla = malloc(n * sizeof(double));
+    double *Mwil = malloc(n * sizeof(double)), *Swil = malloc(n * sizeof(double));
+    double *Mari = malloc(n * sizeof(double)), *Sari = malloc(n * sizeof(double));
+
+    FILE *fm = fopen(output_path, "r");
+    for (int i = 0; i < n; i++)
+        fscanf(fm, "%lf %lf %lf %lf %lf %lf %lf",
+               &tiempo[i], &Mpla[i], &Spla[i], &Mwil[i], &Swil[i], &Mari[i], &Sari[i]);
+    fclose(fm);
+
+    const char *nombres[3] = {"PLAQUETAS", "WILSONS", "ARISTAS"};
+    fprintf(fc, "=========== ANALISIS DE COMPATIBILIDAD ===========\n\n");
+
+    // Analizamos cada observable
+    for (int var = 0; var < 3; var++) {
+        fprintf(fc, "-----------%s-----------\n\n", nombres[var]);
+
+        for (int k = k_ini; k <= k_final; k++) {
+            char path[512];
+            sprintf(path, "Resultados_simulacion/TERMALIZACION/0.72/VENTANAS/EVOLUCION/I_%d.txt", k);
+            FILE *f = fopen(path, "r");
+            if (!f) continue;
+
+            double *m = malloc(n * sizeof(double));
+            double *s = malloc(n * sizeof(double));
+
+            for (int i = 0; i < n; i++) {
+                double t;
+                if (var == 0)
+                    fscanf(f, "%lf %lf %lf", &t, &m[i], &s[i]);
+                else if (var == 1)
+                    fscanf(f, "%lf %*lf %*lf %lf %lf", &t, &m[i], &s[i]);
+                else
+                    fscanf(f, "%lf %*lf %*lf %*lf %*lf %lf %lf", &t, &m[i], &s[i]);
+            }
+            fclose(f);
+
+            fprintf(fc, "I_%d.txt      Compatible con la media en los tramos:\n\n", k);
+
+            int en_intervalo = 0;
+            double inicio = 0.0;
+
+            for (int i = 0; i < n; i++) {
+                double M = (var == 0 ? Mpla[i] : (var == 1 ? Mwil[i] : Mari[i]));
+                double Sm = (var == 0 ? Spla[i] : (var == 1 ? Swil[i] : Sari[i]));
+                double sigma = sqrt(s[i]*s[i] + Sm*Sm);
+                double diff = M - m[i];
+
+                if (fabs(diff) <= 2.0 * sigma) {
+                    if (!en_intervalo) {
+                        inicio = tiempo[i];
+                        en_intervalo = 1;
+                    }
+                } else if (en_intervalo) {
+                    fprintf(fc, "[%.0f, %.0f]\n", inicio, tiempo[i - 1]);
+                    en_intervalo = 0;
+                }
+            }
+            if (en_intervalo)
+                fprintf(fc, "[%.0f, %.0f]\n", inicio, tiempo[n - 1]);
+            fprintf(fc, "\n");
+
+            free(m);
+            free(s);
+        }
+    }
+
+    fclose(fc);
+    printf("Archivo global creado: %s\n", output_path);
+    printf("Archivo de compatibilidad creado: %s\n", compat_path);
+
+    // Liberar memoria
+    free(tiempo);
+    free(Mpla); free(Spla);
+    free(Mwil); free(Swil);
+    free(Mari); free(Sari);
+    for (int c = 0; c < num_conf; c++) {
+        free(plaq[c]);
+        free(wil[c]);
+        free(ari[c]);
+    }
+    free(plaq);
+    free(wil);
+    free(ari);
 }

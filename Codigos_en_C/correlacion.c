@@ -10,7 +10,7 @@ extern int xm[];
 extern int ym[];
 extern int zm[];
 
-void guardar_parametros(char* archivo_entrada,int N_pasos_entre_medidas,int N_medidas) {
+void guardar_parametros(char* archivo_entrada,int N_sweps_entre_medidas,int N_medidas) {
     char* folder_param;
     if(beta==0.72){
         folder_param = "Resultados_simulacion/CORRELACION/0.72/PARAMETROS";
@@ -46,7 +46,7 @@ void guardar_parametros(char* archivo_entrada,int N_pasos_entre_medidas,int N_me
     fprintf(fparam, "L\t%d\n", L);
     fprintf(fparam, "J\t%f\n", J);
     fprintf(fparam, "beta\t%f\n", beta);
-    fprintf(fparam, "N_pasos_entre_medidas\t%d\n", N_pasos_entre_medidas);
+    fprintf(fparam, "N_sweps_entre_medidas\t%d\n", N_sweps_entre_medidas);
     fprintf(fparam, "N_medidas\t%d\n", N_medidas);
     fprintf(fparam, "Configuracion inicial:\t%s\n", archivo_entrada);
 
@@ -331,7 +331,7 @@ int main(){
     double probabilidades[5];
 
     int un_sweep = 3*L*L*L;
-    int N_pasos_entre_med = un_sweep;
+    int N_sweps_entre_med = 1;
     int N_medidas = 20000;
     /*
     
@@ -390,10 +390,10 @@ int main(){
         dame_plaquetas(s,plaquetas);
         
         // Guardar parámetros
-        guardar_parametros(input_file_config, N_pasos_entre_med, N_medidas);
+        guardar_parametros(input_file_config, N_sweps_entre_med, N_medidas);
         
         // Ejecutar dinámica de Metropolis
-        dinamica_metropolis(N_pasos_entre_med, N_medidas, probabilidades, s, plaquetas
+        dinamica_metropolis(N_sweps_entre_med, N_medidas, probabilidades, s, plaquetas
         #ifdef correlacion
             , output_file_evol, param_file
         #endif

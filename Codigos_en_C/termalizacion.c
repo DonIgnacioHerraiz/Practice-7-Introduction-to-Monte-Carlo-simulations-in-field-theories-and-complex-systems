@@ -9,7 +9,7 @@ extern int xm[];
 extern int ym[];
 extern int zm[];
 
-void guardar_parametros(int FLAG_INI, int N_pasos_entre_medidas,int N_medidas) {
+void guardar_parametros(int FLAG_INI, int N_sweps_entre_medidas,int N_medidas) {
     char* folder_param;
     if(beta==0.72){
         folder_param = "Resultados_simulacion/TERMALIZACION/0.72/PARAMETROS";
@@ -49,7 +49,7 @@ void guardar_parametros(int FLAG_INI, int N_pasos_entre_medidas,int N_medidas) {
     }else{
         fprintf(fparam, "estado_inicial\thot\n");
     }
-    fprintf(fparam, "N_pasos_entre_medidas\t%d\n", N_pasos_entre_medidas);
+    fprintf(fparam, "N_sweps_entre_medidas\t%d\n", N_sweps_entre_medidas);
     fprintf(fparam, "N_medidas\t%d\n", N_medidas);
 
     fclose(fparam);
@@ -62,20 +62,29 @@ int main(){
     double probabilidades[5];
     //int FLAG_INI=0;
     int un_sweep=3*L*L*L;
-    int N_pasos_entre_med=1*un_sweep;
-    int N_medidas=10000;
+    int N_sweps_entre_med=70*5;
+    int N_medidas=600;
 
     for(int FLAG_INI=0;FLAG_INI<2;FLAG_INI++){
 
-    for(int j=0;j<20;j++){
+    for(int j=0;j<10;j++){
     vector_cociente_prob(probabilidades);
     inicializa_vectores_de_vecinos();
     crea_configuracionInicial(FLAG_INI, s);
     dame_plaquetas(s, plaquetas);
-    guardar_parametros(FLAG_INI,N_pasos_entre_med,N_medidas);
-    dinamica_metropolis(N_pasos_entre_med, N_medidas, probabilidades,s, plaquetas);
+    guardar_parametros(FLAG_INI,N_sweps_entre_med,N_medidas);
+    dinamica_metropolis(N_sweps_entre_med, N_medidas, probabilidades,s, plaquetas);
     }
     }
+
+    /*
+    int k_ini = 0, k_final = 19;
+    int N_ventana = 100;
+
+    crear_ventanas(k_ini, k_final, N_ventana);
+    crear_media_global(k_ini, k_final);
+    */
+
 
     return 0;
 }

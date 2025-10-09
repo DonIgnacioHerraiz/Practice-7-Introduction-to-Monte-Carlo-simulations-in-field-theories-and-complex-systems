@@ -6,4 +6,4 @@
 #define J 1.0
 
 #define termalizacion
-#define correlacion
+//#define correlacion
