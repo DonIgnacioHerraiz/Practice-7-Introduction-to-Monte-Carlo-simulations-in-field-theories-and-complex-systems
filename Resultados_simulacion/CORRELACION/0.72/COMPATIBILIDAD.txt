@@ -1,0 +1,15 @@
+-----------PLAQUETAS-----------
+Intervalos de tiempo en los que la correlacion es compatible con 0:
+
+[59,19999]
+
+-----------WILSONS-----------
+Intervalos de tiempo en los que la correlacion es compatible con 0:
+
+[61,19999]
+
+-----------ARISTAS-----------
+Intervalos de tiempo en los que la correlacion es compatible con 0:
+
+[70,19999]
+

@@ -49,9 +49,7 @@ int Wilson_loop_x(int Nodo_inicial, int *aristas, int n);
 
 int Wilson_loop_y(int Nodo_inicial, int *aristas, int n);
 
-
-
-
+void dame_wilsons_nn(int *aristas, int *wilsons, int n);
 
 int Wilson_loop_z(int Nodo_inicial, int *aristas, int n);  
 

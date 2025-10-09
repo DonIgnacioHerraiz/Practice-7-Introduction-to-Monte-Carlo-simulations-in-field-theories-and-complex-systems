@@ -37,8 +37,24 @@ void crea_configuracionInicial( int flag, int *s){
     double r;
     double V=3*L*L*L;
     char *filename = (char *)malloc(256 * sizeof(char));
+    char* folder;
 
-    const char* folder = "Resultados_simulacion/CONFIGURACION_INICIAL";
+#ifdef termalizacion
+    if(beta == 0.72) {
+        folder = "Resultados_simulacion/TERMALIZACION/0.72/CONFIGURACION_INICIAL";
+    }
+    else if(beta == 0.8) {
+        folder = "Resultados_simulacion/TERMALIZACION/0.80/CONFIGURACION_INICIAL";
+    }
+    else {
+        printf("PON EL VALOR DE BETA QUE TOCA, AMIGO MIO");
+        // Es buena idea asignar un valor por defecto
+        folder = "Resultados_simulacion/CONFIGURACION_INICIAL";
+    }
+    #else 
+    folder = "Resultados_simulacion/CONFIGURACION_INICIAL";
+    #endif
+
     FILE* file;
     int k = 0;
 
@@ -95,6 +111,7 @@ void crea_configuracionInicial( int flag, int *s){
     fclose(file);
     }
 
+    
 void lee_configuracionInicial(int *s, char *input_file){
     int i;
     double r;
@@ -354,6 +371,234 @@ void calculo_promedios_wilson(int *s, int *plaquetas, int n, int m, int nodos_wi
     free(promedios_wilson);
     free(promedios_promedios_wilson);
 }
+
+void dinamica_metropolis(
+    int N_pasos_entre_med,
+    int N_medidas,
+    double probabilidades[5],
+    int *aristas,
+    int *plaquetas
+#ifdef correlacion
+    , const char* filename_evolucion,
+    const char* filename_param
+#endif
+) {
+    int V = 3 * L * L * L;
+
+    // Variables para medición de tiempos
+    clock_t inicio_total, fin_total;
+    clock_t inicio_io, fin_io;
+    clock_t inicio_calculos, fin_calculos;
+    clock_t inicio_metropolis, fin_metropolis;
+    
+    double tiempo_total, tiempo_io = 0.0, tiempo_calculos = 0.0, tiempo_metropolis = 0.0;
+
+#ifndef correlacion
+    // -------------------------
+    // Determinar nombre del archivo de salida
+    // -------------------------
+    char* folder_inicial;
+    char* folder_salida; 
+    char* folder_final; 
+    char* folder_param;
+
+#ifdef termalizacion
+    if (beta == 0.72) {
+        folder_inicial = "Resultados_simulacion/TERMALIZACION/0.72/CONFIGURACION_INICIAL";
+        folder_salida  = "Resultados_simulacion/TERMALIZACION/0.72/EVOLUCION";
+        folder_final   = "Resultados_simulacion/TERMALIZACION/0.72/CONFIGURACION_FINAL";
+        folder_param   = "Resultados_simulacion/TERMALIZACION/0.72/PARAMETROS";
+    } else if (beta == 0.8) {
+        folder_inicial = "Resultados_simulacion/TERMALIZACION/0.80/CONFIGURACION_INICIAL";
+        folder_salida  = "Resultados_simulacion/TERMALIZACION/0.80/EVOLUCION";
+        folder_final   = "Resultados_simulacion/TERMALIZACION/0.80/CONFIGURACION_FINAL";
+        folder_param   = "Resultados_simulacion/TERMALIZACION/0.80/PARAMETROS";
+    } else {
+        printf("PON EL VALOR DE BETA QUE TOCA, AMIGO MIO");
+    }
+#else 
+    folder_inicial = "Resultados_simulacion/CONFIGURACION_INICIAL";
+#endif
+#endif // !correlacion
+    
+    // Iniciar medición de tiempo total
+    inicio_total = clock();
+
+#ifndef correlacion
+    char filename[256];
+    int d = 0;
+    FILE* ftest;
+
+    // Medir tiempo de I/O para búsqueda de archivos
+    inicio_io = clock();
+    
+    // Buscar el mayor índice de configuración inicial existente
+    while (1) {
+        snprintf(filename, sizeof(filename), "%s/I_%d.txt", folder_inicial, d);
+        ftest = fopen(filename, "r");
+        if (ftest) {
+            fclose(ftest);
+            d++;
+        } else break;
+    }
+
+    if (d == 0) {
+        printf("No se encontraron archivos iniciales en %s\n", folder_inicial);
+        return;
+    }
+    d--; // Tomamos el mayor k existente
+
+    snprintf(filename, sizeof(filename), "%s/I_%d.txt", folder_salida, d);
+    FILE* foutput = fopen(filename, "w");
+#else
+    // En modo correlación, usamos los nombres pasados como parámetros
+    FILE* foutput = fopen(filename_evolucion, "w");
+#endif
+
+    if (!foutput) {
+#ifdef correlacion
+        printf("No se pudo crear el archivo %s\n", filename_evolucion);
+#else
+        printf("No se pudo crear el archivo %s\n", filename);
+#endif
+        return;
+    }
+
+#ifndef correlacion
+    fin_io = clock();
+    tiempo_io += (double)(fin_io - inicio_io) / CLOCKS_PER_SEC;
+#endif
+
+    // -------------------------
+    // Dinámica de Metropolis
+    // -------------------------
+    int paso, aceptadas = 0;
+    int wilsons[V];
+    double media_wilsons, media_plaqueta;
+
+    for (paso = 1; paso <= N_medidas; paso++) {
+        // Tiempo de Metropolis
+        inicio_metropolis = clock();
+        N_pasos_metropolis(N_pasos_entre_med, aristas, plaquetas, probabilidades, &aceptadas);
+        fin_metropolis = clock();
+        tiempo_metropolis += (double)(fin_metropolis - inicio_metropolis) / CLOCKS_PER_SEC;
+
+        // Tiempo de cálculos
+        inicio_calculos = clock();
+        
+        // Calcular promedio de plaquetas y de los wilsons
+        dame_wilsons_nn(aristas, wilsons, 2);
+        media_wilsons = promedio(wilsons,V);
+        media_plaqueta = promedio(plaquetas,V);
+
+        // Calcular magnetización
+        double mag = (double)magnetizacion(aristas) / V;
+        
+        fin_calculos = clock();
+        tiempo_calculos += (double)(fin_calculos - inicio_calculos) / CLOCKS_PER_SEC;
+
+        // Tiempo de I/O para escritura
+        inicio_io = clock();
+#ifdef correlacion
+        fprintf(foutput, "%f\t%f\t%f\t%f\n",
+                paso * N_pasos_entre_med / ((double)V),
+                media_plaqueta, media_wilsons, mag);
+#else
+        fprintf(foutput, "%f\t%f\t%f\t%f\n",
+                paso * N_pasos_entre_med / ((double)V),
+                media_plaqueta, media_wilsons, mag);
+#endif
+        fin_io = clock();
+        tiempo_io += (double)(fin_io - inicio_io) / CLOCKS_PER_SEC;
+    }
+
+    fclose(foutput);
+
+#ifndef correlacion
+    // -------------------------
+    // Guardar configuración final (aristas) - I/O
+    // -------------------------
+    inicio_io = clock();
+    
+    char filename_final[256];
+    snprintf(filename_final, sizeof(filename_final), "%s/I_%d.txt", folder_final, d);
+
+    FILE* fconfig = fopen(filename_final, "w");
+    if (!fconfig) {
+        printf("No se pudo crear el archivo de configuración final %s\n", filename_final);
+        return;
+    }
+
+    for (int i = 0; i < V; i++) {
+        fprintf(fconfig, "%d\n", aristas[i]);
+    }
+
+    fclose(fconfig);
+    fin_io = clock();
+    tiempo_io += (double)(fin_io - inicio_io) / CLOCKS_PER_SEC;
+#endif
+
+    // -------------------------
+    // Medición del tiempo total y mostrar resultados
+    // -------------------------
+    fin_total = clock();
+    tiempo_total = (double)(fin_total - inicio_total) / CLOCKS_PER_SEC;
+
+    printf("\n=== DESGLOSE DE TIEMPOS ===\n");
+    printf("Tiempo total: %.2f s\n", tiempo_total);
+    printf(" - Metropolis: %.2f s (%.1f%%)\n", tiempo_metropolis, (tiempo_metropolis/tiempo_total)*100.0);
+    printf(" - Cálculos: %.2f s (%.1f%%)\n", tiempo_calculos, (tiempo_calculos/tiempo_total)*100.0);
+    printf(" - I/O: %.2f s (%.1f%%)\n", tiempo_io, (tiempo_io/tiempo_total)*100.0);
+
+    // -------------------------
+    // Guardar tiempo total en archivo de parámetros
+    // -------------------------
+    inicio_io = clock();
+#ifdef correlacion
+    FILE* fparam = fopen(filename_param, "a");
+#else
+    snprintf(filename_param, sizeof(filename_param), "%s/I_%d.txt", folder_param, d);
+    FILE* fparam = fopen(filename_param, "a");
+#endif
+
+    if (fparam) {
+        fprintf(fparam, "Tiempo_total(s)\t%f\n", tiempo_total);
+        fprintf(fparam," - Metropolis: %.2f s (%.1f%%)\n", tiempo_metropolis, (tiempo_metropolis/tiempo_total)*100.0);
+        fprintf(fparam," - Cálculos: %.2f s (%.1f%%)\n", tiempo_calculos, (tiempo_calculos/tiempo_total)*100.0);
+        fprintf(fparam," - I/O: %.2f s (%.1f%%)\n", tiempo_io, (tiempo_io/tiempo_total)*100.0);
+        fclose(fparam);
+#ifdef correlacion
+        printf("Tiempo total guardado en %s\n", filename_param);
+#endif
+    } else {
+        printf("No se pudo abrir el archivo de parámetros %s\n", filename_param);
+    }
+    
+    fin_io = clock();
+}
+
+void estadistica(int *variable, double *media, double *desvest) {
+    int N = 3 * L * L * L;
+    double suma = 0.0;
+    double suma2 = 0.0;
+
+    for (int i = 0; i < N; i++) {
+        double val = (double)variable[i];
+        suma  += val;
+        suma2 += val * val;
+    }
+
+    *media = suma / N;
+    *desvest = sqrt( (suma2 / N) - (*media) * (*media) );
+}
+
+double promedio(int *variable, int N) {
+    double suma = 0.0;
+    for (int i = 0; i < N; i++)
+        suma += (double)variable[i];
+    return suma / N;
+}
+
 
 
 

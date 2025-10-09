@@ -1,8 +1,0 @@
-L 1.18576e-322
-beta 0.72
-J 1
-n 10
-m 200
-n_pasos 5000000
-n_pasos_entre_mediciones 1000
-n_termalizacion 100000

@@ -1,0 +1,7 @@
+L	24
+J	1.000000
+beta	0.720000
+estado_inicial	hot
+N_pasos_entre_medidas	41472
+N_medidas	10000
+Tiempo(s)	28.439000

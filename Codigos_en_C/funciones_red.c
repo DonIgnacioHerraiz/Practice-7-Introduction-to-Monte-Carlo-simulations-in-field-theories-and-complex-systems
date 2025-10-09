@@ -140,129 +140,6 @@ int vecino_n_zp(int Nodo, int n){
     return Nodo;
 }
 
-double una_fila_x_loop_z(int Nodo_inicial, int *aristas, int n){
-    int N_loops=0;
-    int suma=0;
-    int comienzo=0;
-    int desplazamiento=0;
-    int Nodo_actual=Nodo_inicial;
-    while (comienzo<n){
-        desplazamiento=comienzo;
-        while(desplazamiento<L-1){
-            desplazamiento=desplazamiento+n;
-            suma=suma+un_loop_z(Nodo_actual,aristas,n);
-            Nodo_actual=vecino_n_xp(Nodo_actual,n-1);
-            N_loops++;
-        }
-        comienzo++;
-    }
-    return (double)suma/N_loops;
-}   
-
-double una_fila_y_loop_x(int Nodo_inicial, int *aristas, int n){
-    int N_loops=0;
-    int suma=0;
-    int comienzo=0;
-    int desplazamiento=0;
-    int Nodo_actual=Nodo_inicial;
-    while (comienzo<n){
-        desplazamiento=comienzo;
-        while(desplazamiento<L-1){
-            desplazamiento=desplazamiento+n;
-            suma=suma+un_loop_x(Nodo_actual,aristas,n);
-            Nodo_actual=vecino_n_yp(Nodo_actual,n-1);
-            N_loops++;
-        }
-        comienzo++;
-    }
-    return (double)suma/N_loops;
-}  
-
-double una_fila_z_loop_y(int Nodo_inicial, int *aristas, int n){
-    int N_loops=0;
-    int suma=0;
-    int comienzo=0;
-    int desplazamiento=0;
-    int Nodo_actual=Nodo_inicial;
-    while (comienzo<n){
-        desplazamiento=comienzo;
-        while(desplazamiento<L-1){
-            desplazamiento=desplazamiento+n;
-            suma=suma+un_loop_y(Nodo_actual,aristas,n);
-            Nodo_actual=vecino_n_zp(Nodo_actual,n-1);
-            N_loops++;
-        }
-        comienzo++;
-    }
-    return (double)suma/N_loops;
-} 
-
-int Wilson_loop_x(int Nodo_inicial, int *aristas, int n){
-
-    int N_loops=0;
-    double suma=0;
-    int comienzo=0;
-    int desplazamiento=0;
-    int Nodo_actual=Nodo_inicial;
-    while (comienzo<n){
-        desplazamiento=comienzo;
-        while(desplazamiento<L-1){
-            desplazamiento=desplazamiento+n;
-            suma=suma+una_fila_y_loop_x(Nodo_actual,aristas,n);
-            Nodo_actual=vecino_n_zp(Nodo_actual,n-1);
-            N_loops++;
-        }
-        comienzo++;
-    }
-    return suma/N_loops;
-}    
-
-int Wilson_loop_y(int Nodo_inicial, int *aristas, int n){
-
-    int N_loops=0;
-    double suma=0;
-    int comienzo=0;
-    int desplazamiento=0;
-    int Nodo_actual=Nodo_inicial;
-    while (comienzo<n){
-        desplazamiento=comienzo;
-        while(desplazamiento<L-1){
-            desplazamiento=desplazamiento+n;
-            suma=suma+una_fila_z_loop_y(Nodo_actual,aristas,n);
-            Nodo_actual=vecino_n_xp(Nodo_actual,n-1);
-            N_loops++;
-        }
-        comienzo++;
-    }
-    return suma/N_loops;
-}   
-
-
-
-
-
-int Wilson_loop_z(int Nodo_inicial, int *aristas, int n){
-
-    int N_loops=0;
-    double suma=0;
-    int comienzo=0;
-    int desplazamiento=0;
-    int Nodo_actual=Nodo_inicial;
-    while (comienzo<n){
-        desplazamiento=comienzo;
-        while(desplazamiento<L-1){
-            desplazamiento=desplazamiento+n;
-            suma=suma+una_fila_x_loop_z(Nodo_actual,aristas,n);
-            Nodo_actual=vecino_n_yp(Nodo_actual,n-1);
-            N_loops++;
-        }
-        comienzo++;
-    }
-    return suma/N_loops;
-}   
-
-
-
 
 int un_loop_z(int Nodo_inicial, int *arista, int n){
     int lado_sur=1;
@@ -358,9 +235,6 @@ double prom_Wilson_loops(int n, int *aristas){
 }
 
 
-
-
-
 void inicializa_nodos_wilson( int n, int m, int nodos_wilson[][m][2]){
     for(int i=0;i<n;i++){
         for(int j=0;j<m;j++){
@@ -369,3 +243,14 @@ void inicializa_nodos_wilson( int n, int m, int nodos_wilson[][m][2]){
         }
     }
 }
+
+void dame_wilsons_nn(int *aristas, int *wilsons, int n){
+    int V=L*L*L;
+    for(int i=0;i<V;i++){
+        wilsons[3*i]=un_loop_x(i,aristas,n);
+        wilsons[3*i+1]=un_loop_y(i,aristas,n);
+        wilsons[3*i+2]=un_loop_z(i,aristas,n);
+    }
+}
+
+

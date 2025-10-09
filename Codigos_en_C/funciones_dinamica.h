@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <time.h>
 #include "random.h"
 #include "funciones_red.h"
 
@@ -15,6 +16,7 @@ extern int ym[];
 extern int zm[];
 
 void crea_configuracion( int flag, int *s);
+void estadistica(int *variable, double *media, double *desvest);
 
 void crea_configuracionInicial( int flag, int *s);
 void lee_configuracionInicial(int *s, char *input_file);
@@ -29,3 +31,12 @@ void N_pasos_metropolis(int N, int *aristas, int *plaquetas, double probabilidad
 
 void calculo_promedios_wilson(int *s, int *plaquetas, int n, int m, int nodos_wilson[n][m][2], int n_pasos, int n_pasos_entre_mediciones, int n_termalizacion, double probabilidades[5]);
 void guarda_parametros(int n, int m, int n_pasos, int n_pasos_entre_mediciones, int n_termalizacion);
+
+void dinamica_metropolis(int N_pasos_entre_med, int N_medidas, double probabilidades[5], int *aristas, int *plaquetas
+#ifdef correlacion
+    , const char* filename_evolucion, const char* filename_parametros
+#endif
+    );
+void crea_configuracionInicial_termalizacion( int flag, int *s);
+
+double promedio(int *variable, int N);

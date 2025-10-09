@@ -128,6 +128,55 @@
             "command": ".\\TESTS\\simetria_gauge_plaqueta.exe",
             "group": "test"
         },
+        {
+            "label": "compilar programa de la TERMALIZACION",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "Codigos_en_C\\funciones_dinamica.c",
+                "Codigos_en_C\\funciones_red.c",
+                "Codigos_en_C\\random.c",
+                "Codigos_en_C\\termalizacion.c",
+                "-o",
+                "Codigos_en_C\\termalizacion.exe",
+                "-lm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "ejecutar programa termalizacion",
+            "type": "shell",
+            "command": ".\\Codigos_en_C\\termalizacion.exe",
+            "group": "test"
+        },{
+            "label": "compilar programa de la CORRELACION",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "Codigos_en_C\\funciones_dinamica.c",
+                "Codigos_en_C\\funciones_red.c",
+                "Codigos_en_C\\random.c",
+                "Codigos_en_C\\correlacion.c",
+                "-o",
+                "Codigos_en_C\\correlacion.exe",
+                "-lm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "ejecutar programa CORRELACION",
+            "type": "shell",
+            "command": ".\\Codigos_en_C\\correlacion.exe",
+            "group": "test"
+        },
     ]
 }
 

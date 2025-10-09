@@ -1,0 +1,10 @@
+L	24
+J	1.000000
+beta	0.720000
+N_pasos_entre_medidas	41472
+N_medidas	20000
+Configuracion inicial:	Resultados_simulacion/TERMALIZACION/0.72/CONFIGURACION_FINAL/I_6.txt
+Tiempo_total(s)	38.633000
+ - Metropolis: 25.99 s (67.3%)
+ - Cálculos: 12.59 s (32.6%)
+ - I/O: 0.05 s (0.1%)
