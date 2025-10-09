@@ -1,6 +1,0 @@
-L	24
-J	1.000000
-beta	0.720000
-estado_inicial	hot
-N_sweps_entre_medidas	350
-N_medidas	600

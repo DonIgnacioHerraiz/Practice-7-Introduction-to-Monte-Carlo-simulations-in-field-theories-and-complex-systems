@@ -63,7 +63,7 @@ int main(){
     //int FLAG_INI=0;
     int un_sweep=3*L*L*L;
     int N_sweps_entre_med=70*5;
-    int N_medidas=600;
+    int N_medidas=20;
 
     for(int FLAG_INI=0;FLAG_INI<2;FLAG_INI++){
 

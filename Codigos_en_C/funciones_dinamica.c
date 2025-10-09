@@ -394,6 +394,10 @@ void dinamica_metropolis(
     double tiempo_total, tiempo_io = 0.0, tiempo_calculos = 0.0, tiempo_metropolis = 0.0;
 
 #ifndef correlacion
+    char filename_param[256];
+#endif
+
+#ifndef correlacion
     // -------------------------
     // Determinar nombre del archivo de salida
     // -------------------------
@@ -401,7 +405,6 @@ void dinamica_metropolis(
     char* folder_salida; 
     char* folder_final; 
     char* folder_param;
-    char *filename_param;
 
 #ifdef termalizacion
     if (beta == 0.72) {
@@ -501,11 +504,11 @@ void dinamica_metropolis(
         // Tiempo de I/O para escritura
         inicio_io = clock();
 #ifdef correlacion
-        fprintf(foutput, "%f\t%f\t%f\t%f\n",
+        fprintf(foutput, "%d\t%f\t%f\t%f\n",
                 paso * N_sweeps_entre_med,
                 media_plaqueta, media_wilsons, mag);
 #else
-        fprintf(foutput, "%f\t%f\t%f\t%f\n",
+        fprintf(foutput, "%d\t%f\t%f\t%f\n",
                 paso * N_sweeps_entre_med,
                 media_plaqueta, media_wilsons, mag);
 #endif
@@ -558,8 +561,8 @@ void dinamica_metropolis(
 #ifdef correlacion
     FILE* fparam = fopen(filename_param, "a");
 #else
-    snprintf(filename_param, sizeof(filename_param), "%s/I_%d.txt", folder_param, d);
-    FILE* fparam = fopen(filename_param, "a");
+snprintf(filename_param, sizeof(filename_param), "%s/I_%d.txt", folder_param, d);
+FILE* fparam = fopen(filename_param, "a");
 #endif
 
     if (fparam) {
