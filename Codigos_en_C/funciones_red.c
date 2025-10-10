@@ -14,10 +14,10 @@ void inicializa_vectores_de_vecinos(void) {
     for(int i = 0; i < L*L*L; i++) {
         xp[i] = 1;
         yp[i] = L;
-        xm[i+1] = -1;
-        ym[i+1] = -L;
+        xm[i] = -1;
+        ym[i] = -L;
         zp[i] = L*L;
-        zm[i+1] = -L*L;
+        zm[i] = -L*L;
     }
 
 

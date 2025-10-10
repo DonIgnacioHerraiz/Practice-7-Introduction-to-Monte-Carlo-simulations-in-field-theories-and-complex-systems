@@ -176,7 +176,33 @@
             "type": "shell",
             "command": ".\\Codigos_en_C\\correlacion.exe",
             "group": "test"
-        },
+        },{
+    "label": "compilar MAIN",
+    "type": "shell",
+    "command": "gcc",
+    "args": [
+        "Codigos_en_C\\funciones_dinamica.c",
+        "Codigos_en_C\\funciones_red.c",
+        "Codigos_en_C\\random.c",
+        "Codigos_en_C\\main.c",
+        "-O2",
+        "-o",
+        "Codigos_en_C\\main.exe",
+        "-lm"
+    ],
+    "group": {
+        "kind": "build",
+        "isDefault": true
+    },
+    "problemMatcher": ["$gcc"]
+},
+{
+    "label": "ejecutar MAIN",
+    "type": "shell",
+    "command": ".\\Codigos_en_C\\main.exe",
+    "group": "test"
+}
+
     ]
 }
 

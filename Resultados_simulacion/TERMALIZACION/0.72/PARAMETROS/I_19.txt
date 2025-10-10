@@ -1,7 +1,34 @@
 L	24
 J	1.000000
 beta	0.720000
-estado_inicial	hot
-N_pasos_entre_medidas	41472
-N_medidas	10000
-Tiempo(s)	29.304000
+estado_inicial	cold
+N_sweps_entre_medidas	1
+N_medidas	40000
+Tiempo_total(s)	526.640000
+ - Metropolis: 24.59 s (4.7%)
+ - Cálculos: 501.70 s (95.3%)
+ - I/O: 0.33 s (0.1%)
+Tiempo_total(s)	40.759000
+ - Metropolis: 1.88 s (4.6%)
+ - Cálculos: 38.25 s (93.8%)
+ - I/O: 0.63 s (1.5%)
+Tiempo_total(s)	39.810000
+ - Metropolis: 1.88 s (4.7%)
+ - Cálculos: 37.90 s (95.2%)
+ - I/O: 0.03 s (0.1%)
+Tiempo_total(s)	39.597000
+ - Metropolis: 1.86 s (4.7%)
+ - Cálculos: 37.66 s (95.1%)
+ - I/O: 0.08 s (0.2%)
+Tiempo_total(s)	39.568000
+ - Metropolis: 1.86 s (4.7%)
+ - Cálculos: 37.67 s (95.2%)
+ - I/O: 0.04 s (0.1%)
+Tiempo_total(s)	40.212000
+ - Metropolis: 1.90 s (4.7%)
+ - Cálculos: 38.28 s (95.2%)
+ - I/O: 0.03 s (0.1%)
+Tiempo_total(s)	40.572000
+ - Metropolis: 1.90 s (4.7%)
+ - Cálculos: 38.64 s (95.2%)
+ - I/O: 0.04 s (0.1%)

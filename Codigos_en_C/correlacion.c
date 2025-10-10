@@ -54,9 +54,6 @@ void guardar_parametros(char* archivo_entrada,int N_sweps_entre_medidas,int N_me
     printf("Archivo de parámetros creado: %s\n", filename);
 }
 
-#include <stdio.h>
-#include <stdlib.h>
-
 // ---------------------------------------------------------------------------
 // Calcula la autocorrelación normalizada ρ(t) de una serie O[0..N-1].
 // Devuelve un array rho[0..N-1] (el usuario debe liberar la memoria).
@@ -100,10 +97,7 @@ double* autocorrelacion(double *O, int N) {
 }
 
 // ---------------------------------------------------------------------------
-// Lee un archivo de entrada con formato:
-// tiempo  var1  var2  var3
-// y escribe en otro archivo:
-// tiempo  corr(var1)  corr(var2)  corr(var3)
+// Calcula las correlaciones para 11 variables del archivo dado
 // ---------------------------------------------------------------------------
 void calcular_correlaciones(const char *archivo_entrada, const char *archivo_salida) {
     FILE *fin = fopen(archivo_entrada, "r");
@@ -112,67 +106,78 @@ void calcular_correlaciones(const char *archivo_entrada, const char *archivo_sal
         return;
     }
 
-    // Leer datos en memoria
-    int Nmax = 1000000;
-    double *var1 = malloc(Nmax * sizeof(double));
-    double *var2 = malloc(Nmax * sizeof(double));
-    double *var3 = malloc(Nmax * sizeof(double));
-    double *tiempo = malloc(Nmax * sizeof(double));
-
-    if (!var1 || !var2 || !var3 || !tiempo) {
-        printf("Error: no se pudo reservar memoria\n");
-        return;
-    }
+    double **vars = malloc(11 * sizeof(double*));
+    double *tiempo = NULL;
+    for (int i = 0; i < 11; i++) vars[i] = NULL;
 
     int N = 0;
-    while (fscanf(fin, "%lf %lf %lf %lf", &tiempo[N], &var1[N], &var2[N], &var3[N]) == 4) {
-        N++;
-        if (N >= Nmax) {
-            printf("Advertencia: alcanzado Nmax = %d\n", Nmax);
-            break;
+    while (1) {
+        double t, valores[11];
+        int leidos = fscanf(fin,
+            "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+            &t,
+            &valores[0], &valores[1], &valores[2], &valores[3], &valores[4],
+            &valores[5], &valores[6], &valores[7], &valores[8], &valores[9], &valores[10]);
+
+        if (leidos != 12) break;
+
+        tiempo = realloc(tiempo, sizeof(double) * (N + 1));
+        tiempo[N] = t;
+
+        for (int j = 0; j < 11; j++) {
+            vars[j] = realloc(vars[j], sizeof(double) * (N + 1));
+            vars[j][N] = valores[j];
         }
+        N++;
     }
     fclose(fin);
 
-    // Calcular correlaciones
-    double *corr_var1 = autocorrelacion(var1, N);
-    double *corr_var2 = autocorrelacion(var2, N);
-    double *corr_var3 = autocorrelacion(var3, N);
+    // Calcular autocorrelaciones
+    double **corr = malloc(11 * sizeof(double*));
+    for (int j = 0; j < 11; j++) {
+        corr[j] = autocorrelacion(vars[j], N);
+    }
 
-    // Escribir resultado
+    // Guardar resultados
     FILE *fout = fopen(archivo_salida, "w");
     if (!fout) {
         printf("No se pudo crear el archivo de salida %s\n", archivo_salida);
         return;
     }
 
-    // Escribimos los desfases de autocorrelación como tiempo 0..N-1
+
+    // Escribir
     for (int t = 0; t < N; t++) {
-        fprintf(fout, "%d\t%f\t%f\t%f\n", t, corr_var1[t], corr_var2[t], corr_var3[t]);
+        fprintf(fout, "%d", t);
+        for (int j = 0; j < 11; j++) fprintf(fout, "\t%f", corr[j][t]);
+        fprintf(fout, "\n");
     }
 
     fclose(fout);
     printf("Archivo de correlaciones creado: %s\n", archivo_salida);
 
-    // Liberar memoria
-    free(var1);
-    free(var2);
-    free(var3);
+    // Liberar
+    for (int j = 0; j < 11; j++) {
+        free(vars[j]);
+        free(corr[j]);
+    }
+    free(vars);
+    free(corr);
     free(tiempo);
-    free(corr_var1);
-    free(corr_var2);
-    free(corr_var3);
 }
 
-
-// Función para concatenar rutas dinámicamente
+// ---------------------------------------------------------------------------
+// Concatenar rutas dinámicamente
+// ---------------------------------------------------------------------------
 char* concat_path(const char *a, const char *b) {
     char *ruta = malloc(strlen(a) + strlen(b) + 2);
     sprintf(ruta, "%s/%s", a, b);
     return ruta;
 }
 
-// Función principal
+// ---------------------------------------------------------------------------
+// Procesa correlaciones de todos los archivos I_k.txt de una carpeta base
+// ---------------------------------------------------------------------------
 void procesar_correlaciones(const char *carpeta_base) {
     char *ruta_corr = concat_path(carpeta_base, "CORR");
 
@@ -183,7 +188,6 @@ void procesar_correlaciones(const char *carpeta_base) {
         return;
     }
 
-    // Lista dinámica de archivos
     char **archivos = NULL;
     int n_files = 0;
     struct dirent *entry;
@@ -202,31 +206,26 @@ void procesar_correlaciones(const char *carpeta_base) {
         return;
     }
 
-    // Leer el primer archivo para determinar N (número de tiempos)
+    // Leer el primer archivo para determinar número de pasos
     char *ruta_file = concat_path(ruta_corr, archivos[0]);
     FILE *f = fopen(ruta_file, "r");
     if (!f) { printf("No se pudo abrir %s\n", ruta_file); free(ruta_file); return; }
 
-    double *tiempo = NULL;
     double t;
     int N = 0;
-    while (fscanf(f, "%lf %*f %*f %*f", &t) == 1) {
-        tiempo = realloc(tiempo, sizeof(double)*(N+1));
-        tiempo[N] = t;
+    while (fscanf(f, "%lf", &t) == 1) {
+        for (int j = 0; j < 11; j++) fscanf(f, "%*lf");
         N++;
     }
     fclose(f);
     free(ruta_file);
 
-    // Arrays para almacenar todas las correlaciones
-    double **plaquetas = malloc(n_files*sizeof(double*));
-    double **wilsons   = malloc(n_files*sizeof(double*));
-    double **aristas   = malloc(n_files*sizeof(double*));
-
-    for (int k = 0; k < n_files; k++) {
-        plaquetas[k] = malloc(N*sizeof(double));
-        wilsons[k]   = malloc(N*sizeof(double));
-        aristas[k]   = malloc(N*sizeof(double));
+    // Reservar espacio dinámico
+    double **valores[11];
+    for (int j = 0; j < 11; j++) {
+        valores[j] = malloc(n_files * sizeof(double*));
+        for (int k = 0; k < n_files; k++)
+            valores[j][k] = malloc(N * sizeof(double));
     }
 
     // Leer todos los archivos
@@ -234,106 +233,95 @@ void procesar_correlaciones(const char *carpeta_base) {
         ruta_file = concat_path(ruta_corr, archivos[k]);
         f = fopen(ruta_file, "r");
         if (!f) { printf("No se pudo abrir %s\n", ruta_file); continue; }
+
         for (int i = 0; i < N; i++) {
-            fscanf(f, "%*lf %lf %lf %lf", &plaquetas[k][i], &wilsons[k][i], &aristas[k][i]);
+            double tiempo;
+            fscanf(f, "%lf", &tiempo);
+            for (int j = 0; j < 11; j++)
+                fscanf(f, "%lf", &valores[j][k][i]);
         }
         fclose(f);
         free(ruta_file);
     }
 
-    // Calcular media y desvío estándar por tiempo y variable
-    double *media_pla = malloc(N*sizeof(double));
-    double *media_wil = malloc(N*sizeof(double));
-    double *media_ari = malloc(N*sizeof(double));
-    double *desv_pla  = malloc(N*sizeof(double));
-    double *desv_wil  = malloc(N*sizeof(double));
-    double *desv_ari  = malloc(N*sizeof(double));
-
-    for (int i = 0; i < N; i++) {
-        double sum, sum2;
-
-        // Plaquetas
-        sum = sum2 = 0.0;
-        for (int k = 0; k < n_files; k++) { sum += plaquetas[k][i]; }
-        media_pla[i] = sum/n_files;
-        for (int k = 0; k < n_files; k++) { sum2 += (plaquetas[k][i]-media_pla[i])*(plaquetas[k][i]-media_pla[i]); }
-        desv_pla[i] = sqrt(sum2/n_files);
-
-        // Wilsons
-        sum = sum2 = 0.0;
-        for (int k = 0; k < n_files; k++) { sum += wilsons[k][i]; }
-        media_wil[i] = sum/n_files;
-        for (int k = 0; k < n_files; k++) { sum2 += (wilsons[k][i]-media_wil[i])*(wilsons[k][i]-media_wil[i]); }
-        desv_wil[i] = sqrt(sum2/n_files);
-
-        // Aristas
-        sum = sum2 = 0.0;
-        for (int k = 0; k < n_files; k++) { sum += aristas[k][i]; }
-        media_ari[i] = sum/n_files;
-        for (int k = 0; k < n_files; k++) { sum2 += (aristas[k][i]-media_ari[i])*(aristas[k][i]-media_ari[i]); }
-        desv_ari[i] = sqrt(sum2/n_files);
+    // Calcular medias y desviaciones
+    double *media[11], *desv[11];
+    for (int j = 0; j < 11; j++) {
+        media[j] = malloc(N*sizeof(double));
+        desv[j]  = malloc(N*sizeof(double));
     }
 
-    // Escribir CORR_PROMEDIO.txt
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < 11; j++) {
+            double sum = 0.0, sum2 = 0.0;
+            for (int k = 0; k < n_files; k++) sum += valores[j][k][i];
+            media[j][i] = sum / n_files;
+            for (int k = 0; k < n_files; k++)
+                sum2 += (valores[j][k][i] - media[j][i])*(valores[j][k][i] - media[j][i]);
+            desv[j][i] = sqrt(sum2 / n_files);
+        }
+    }
+
+    // CORR_PROMEDIO.txt
     ruta_file = concat_path(carpeta_base, "CORR_PROMEDIO.txt");
     f = fopen(ruta_file, "w");
     for (int i = 0; i < N; i++) {
-        fprintf(f, "%.6f\t%.6f\t%.6f\t%.6f\t%.6f\t%.6f\t%.6f\n",
-            tiempo[i],
-            media_pla[i], desv_pla[i],
-            media_wil[i], desv_wil[i],
-            media_ari[i], desv_ari[i]);
+        fprintf(f, "%d", i);
+        for (int j = 0; j < 11; j++)
+            fprintf(f, "\t%.6f\t%.6f", media[j][i], desv[j][i]);
+        fprintf(f, "\n");
     }
     fclose(f);
     free(ruta_file);
 
-    // Escribir COMPATIBILIDAD.txt
+    // COMPATIBILIDAD.txt
     ruta_file = concat_path(carpeta_base, "COMPATIBILIDAD.txt");
     f = fopen(ruta_file, "w");
 
-    const char *nombres[3] = {"PLAQUETAS", "WILSONS", "ARISTAS"};
-    double *medias[3] = {media_pla, media_wil, media_ari};
-    double *desvs[3]  = {desv_pla, desv_wil, desv_ari};
-
-    for (int var = 0; var < 3; var++) {
-        fprintf(f, "-----------%s-----------\n", nombres[var]);
-        fprintf(f, "Intervalos de tiempo en los que la correlacion es compatible con 0:\n\n");
-
+    for (int j = 0; j < 11; j++) {
+        fprintf(f, "-----------VARIABLE %d-----------\n", j+1);
+        fprintf(f, "Intervalos de tiempo en los que la correlación es compatible con 0:\n\n");
         int en_intervalo = 0;
-        double inicio = 0.0;
+        int inicio = 0;
         for (int i = 0; i < N; i++) {
-            if (fabs(medias[var][i]) <= 2*desvs[var][i]) {
-                if (!en_intervalo) { inicio = tiempo[i]; en_intervalo = 1; }
-            } else {
-                if (en_intervalo) {
-                    fprintf(f, "[%.0f,%.0f]\n\n", inicio, tiempo[i-1]);
-                    en_intervalo = 0;
-                }
+            if (fabs(media[j][i]) <= desv[j][i]) {
+                if (!en_intervalo) { inicio = i; en_intervalo = 1; }
+            } else if (en_intervalo) {
+                fprintf(f, "[%d, %d]\n", inicio, i-1);
+                en_intervalo = 0;
             }
         }
-        if (en_intervalo) fprintf(f, "[%.0f,%.0f]\n\n", inicio, tiempo[N-1]);
+        if (en_intervalo) fprintf(f, "[%d, %d]\n", inicio, N-1);
+        fprintf(f, "\n");
     }
 
     fclose(f);
+    free(ruta_file);
 
-    // Liberar memoria
-    for (int k = 0; k < n_files; k++) { free(plaquetas[k]); free(wilsons[k]); free(aristas[k]); free(archivos[k]); }
-    free(plaquetas); free(wilsons); free(aristas); free(archivos);
-    free(media_pla); free(media_wil); free(media_ari);
-    free(desv_pla); free(desv_wil); free(desv_ari);
-    free(tiempo);
+    // Liberar
+    for (int j = 0; j < 11; j++) {
+        for (int k = 0; k < n_files; k++)
+            free(valores[j][k]);
+        free(valores[j]);
+        free(media[j]);
+        free(desv[j]);
+    }
+    for (int k = 0; k < n_files; k++) free(archivos[k]);
+    free(archivos);
     free(ruta_corr);
 }
+
 
 int main(){
     inicializa_PR(12345);
     int s[3*L*L*L], plaquetas[3*L*L*L];
     double probabilidades[5];
 
+    /*
+
     int un_sweep = 3*L*L*L;
     int N_sweps_entre_med = 1;
-    int N_medidas = 20000;
-    /*
+    int N_medidas = 2000;
     
     vector_cociente_prob(probabilidades);
     inicializa_vectores_de_vecinos();

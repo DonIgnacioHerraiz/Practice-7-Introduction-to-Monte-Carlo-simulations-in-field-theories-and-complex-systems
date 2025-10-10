@@ -57,13 +57,14 @@ void guardar_parametros(int FLAG_INI, int N_sweps_entre_medidas,int N_medidas) {
 }
 
 int main(){
+    
     inicializa_PR(12345);
     int s[3*L*L*L], plaquetas[3*L*L*L];
     double probabilidades[5];
-    //int FLAG_INI=0;
+    int FLAG_INI=1;
     int un_sweep=3*L*L*L;
-    int N_sweps_entre_med=70*5;
-    int N_medidas=20;
+    int N_sweps_entre_med=1;
+    int N_medidas=40000;
 
     for(int FLAG_INI=0;FLAG_INI<2;FLAG_INI++){
 
@@ -77,13 +78,13 @@ int main(){
     }
     }
 
-    /*
     int k_ini = 0, k_final = 19;
-    int N_ventana = 100;
+    int N_ventana = 5;
+    int N_salto=3*35;
 
-    crear_ventanas(k_ini, k_final, N_ventana);
+    crear_ventanas(k_ini, k_final, N_ventana,N_salto);
     crear_media_global(k_ini, k_final);
-    */
+
 
 
     return 0;
