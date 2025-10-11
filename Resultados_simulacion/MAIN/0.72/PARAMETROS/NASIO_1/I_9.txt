@@ -1,0 +1,10 @@
+L	24
+J	1.000000
+beta	0.720000
+configuracion_inicial: 	I_12.txt
+N_sweps_entre_medidas	105
+N_medidas	50000
+Tiempo_total(s)	2560.623000
+ - Metropolis: 2152.00 s (84.0%)
+ - Cálculos: 407.99 s (15.9%)
+ - I/O: 0.62 s (0.0%)
