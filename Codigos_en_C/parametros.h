@@ -7,4 +7,4 @@
 
 #define termalizacion
 //#define correlacion
-#define Na // DEFINIR Na PARA NASIO, Ba PARA BARRACHINA, Jo PARA JOEL
+#define Ba // DEFINIR Na PARA NASIO, Ba PARA BARRACHINA, Jo PARA JOEL

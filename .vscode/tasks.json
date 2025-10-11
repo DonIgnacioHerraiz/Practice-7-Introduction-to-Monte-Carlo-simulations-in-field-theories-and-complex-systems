@@ -201,6 +201,28 @@
     "type": "shell",
     "command": ".\\Codigos_en_C\\main.exe",
     "group": "test"
+},{
+    "label": "compilar promedios_errores",
+    "type": "shell",
+    "command": "gcc",
+    "args": [
+        "Codigos_en_C\\promedios_errores.c",
+        "-O2",
+        "-o",
+        "Codigos_en_C\\promedios_errores.exe",
+        "-lm"
+    ],
+    "group": {
+        "kind": "build",
+        "isDefault": true
+    },
+    "problemMatcher": ["$gcc"]
+},
+{
+    "label": "ejecutar promedios_errores",
+    "type": "shell",
+    "command": ".\\Codigos_en_C\\promedios_errores.exe",
+    "group": "test"
 }
 
     ]
