@@ -80,11 +80,11 @@ int main(){
     int s[3*L*L*L], plaquetas[3*L*L*L];
     double probabilidades[5];
     int N_sweps_entre_med=35*3;
-    int N_medidas=50;
+    int N_medidas=50000;
     char input_file[512]; 
 
 
-    for(int j=0;j<10;j++){
+    for(int j=0;j<100;j++){
     int k_ini=(int)(fran()*20);
     sprintf(input_file, "Resultados_simulacion/MAIN/0.72/CONFIGURACIONES/I_%d.txt", k_ini);
     vector_cociente_prob(probabilidades);
