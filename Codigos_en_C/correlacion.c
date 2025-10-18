@@ -284,7 +284,7 @@ void procesar_correlaciones(const char *carpeta_base) {
         int en_intervalo = 0;
         int inicio = 0;
         for (int i = 0; i < N; i++) {
-            if (fabs(media[j][i]) <= desv[j][i]) {
+            if (fabs(media[j][i]) <= 2*desv[j][i]) {
                 if (!en_intervalo) { inicio = i; en_intervalo = 1; }
             } else if (en_intervalo) {
                 fprintf(f, "[%d, %d]\n", inicio, i-1);
@@ -313,15 +313,14 @@ void procesar_correlaciones(const char *carpeta_base) {
 
 
 int main(){
+    /*
     inicializa_PR(12345);
     int s[3*L*L*L], plaquetas[3*L*L*L];
     double probabilidades[5];
 
-    /*
-
     int un_sweep = 3*L*L*L;
     int N_sweps_entre_med = 1;
-    int N_medidas = 2000;
+    int N_medidas = 4000;
     
     vector_cociente_prob(probabilidades);
     inicializa_vectores_de_vecinos();
@@ -392,9 +391,10 @@ int main(){
         
         k++;
     }
-
-    */
+        */
+       if(beta==0.72)
     procesar_correlaciones("Resultados_simulacion/CORRELACION/0.72");
-
+    else if(beta==0.80)
+    procesar_correlaciones("Resultados_simulacion/CORRELACION/0.80");
     return 0;
 }

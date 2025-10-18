@@ -1,64 +1,56 @@
 -----------VARIABLE 1-----------
 Intervalos de tiempo en los que la correlación es compatible con 0:
 
-[32, 62]
-[67, 1999]
+[24, 1999]
 
 -----------VARIABLE 2-----------
 Intervalos de tiempo en los que la correlación es compatible con 0:
 
-[33, 62]
-[67, 1999]
+[25, 1999]
 
 -----------VARIABLE 3-----------
 Intervalos de tiempo en los que la correlación es compatible con 0:
 
-[34, 63]
-[66, 1999]
+[25, 1999]
 
 -----------VARIABLE 4-----------
 Intervalos de tiempo en los que la correlación es compatible con 0:
 
-[34, 1999]
+[25, 1999]
 
 -----------VARIABLE 5-----------
 Intervalos de tiempo en los que la correlación es compatible con 0:
 
-[34, 1999]
+[25, 1999]
 
 -----------VARIABLE 6-----------
 Intervalos de tiempo en los que la correlación es compatible con 0:
 
-[30, 790]
-[792, 792]
-[798, 1999]
+[22, 23]
+[25, 1999]
 
 -----------VARIABLE 7-----------
 Intervalos de tiempo en los que la correlación es compatible con 0:
 
-[21, 786]
-[789, 791]
-[796, 1999]
+[15, 1999]
 
 -----------VARIABLE 8-----------
 Intervalos de tiempo en los que la correlación es compatible con 0:
 
-[11, 765]
-[767, 1999]
+[5, 1999]
 
 -----------VARIABLE 9-----------
 Intervalos de tiempo en los que la correlación es compatible con 0:
 
-[4, 1999]
+[3, 1999]
 
 -----------VARIABLE 10-----------
 Intervalos de tiempo en los que la correlación es compatible con 0:
 
-[2, 1999]
+[1, 1999]
 
 -----------VARIABLE 11-----------
 Intervalos de tiempo en los que la correlación es compatible con 0:
 
-[35, 1403]
-[1405, 1999]
+[19, 1999]
 

@@ -1,0 +1,10 @@
+L	24
+J	1.000000
+beta	0.800000
+N_sweps_entre_medidas	1
+N_medidas	4000
+Configuracion inicial:	Resultados_simulacion/TERMALIZACION/0.80/CONFIGURACION_FINAL/I_18.txt
+Tiempo_total(s)	83.902000
+ - Metropolis: 3.47 s (4.1%)
+ - Cálculos: 80.38 s (95.8%)
+ - I/O: 0.05 s (0.1%)

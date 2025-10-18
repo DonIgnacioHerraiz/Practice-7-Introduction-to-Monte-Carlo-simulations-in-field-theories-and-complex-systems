@@ -57,7 +57,7 @@ void guardar_parametros(int FLAG_INI, int N_sweps_entre_medidas,int N_medidas) {
 }
 
 int main(){
-    
+    /*
     inicializa_PR(12345);
     int s[3*L*L*L], plaquetas[3*L*L*L];
     double probabilidades[5];
@@ -77,10 +77,11 @@ int main(){
     dinamica_metropolis(N_sweps_entre_med, N_medidas, probabilidades,s, plaquetas);
     }
     }
+*/
 
     int k_ini = 0, k_final = 19;
     int N_ventana = 5;
-    int N_salto=3*35;
+    int N_salto=10*3;
 
     crear_ventanas(k_ini, k_final, N_ventana,N_salto);
     crear_media_global(k_ini, k_final);

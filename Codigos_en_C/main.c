@@ -15,7 +15,7 @@ void guardar_parametros(int k_ini, int N_sweps_entre_medidas,int N_medidas) {
     if (beta == 0.72) {
         folder_param   = "Resultados_simulacion/MAIN/0.72/PARAMETROS/NASIO";
     } else if (beta == 0.8) {
-        folder_param   = "Resultados_simulacion/MAIN/0.8/PARAMETROS/NASIO";
+        folder_param   = "Resultados_simulacion/MAIN/0.80/PARAMETROS/NASIO";
     } else {
         printf("PON EL VALOR DE BETA QUE TOCA, AMIGO MIO\n");
     }
@@ -23,7 +23,7 @@ void guardar_parametros(int k_ini, int N_sweps_entre_medidas,int N_medidas) {
     if (beta == 0.72) {
         folder_param   = "Resultados_simulacion/MAIN/0.72/PARAMETROS/BARRACHINA";
     } else if (beta == 0.8) {
-        folder_param   = "Resultados_simulacion/MAIN/0.8/PARAMETROS/BARRACHINA";
+        folder_param   = "Resultados_simulacion/MAIN/0.80/PARAMETROS/BARRACHINA";
     } else {
         printf("PON EL VALOR DE BETA QUE TOCA, AMIGO MIO\n");
     }
@@ -31,7 +31,7 @@ void guardar_parametros(int k_ini, int N_sweps_entre_medidas,int N_medidas) {
     if (beta == 0.72) {
         folder_param   = "Resultados_simulacion/MAIN/0.72/PARAMETROS/JOEL";
     } else if (beta == 0.8) {
-        folder_param   = "Resultados_simulacion/MAIN/0.8/PARAMETROS/JOEL";
+        folder_param   = "Resultados_simulacion/MAIN/0.80/PARAMETROS/JOEL";
     } else {
         printf("PON EL VALOR DE BETA QUE TOCA, AMIGO MIO\n");
     }
@@ -79,14 +79,18 @@ int main(){
     inicializa_PR((int)time(NULL));
     int s[3*L*L*L], plaquetas[3*L*L*L];
     double probabilidades[5];
-    int N_sweps_entre_med=35*3;
-    int N_medidas=50000;
+    int N_sweps_entre_med=15*3;
+    int N_medidas=30000;
     char input_file[512]; 
 
 
-    for(int j=0;j<100;j++){
+    for(int j=0;j<1;j++){
     int k_ini=(int)(fran()*20);
+    if(beta==0.72){
     sprintf(input_file, "Resultados_simulacion/MAIN/0.72/CONFIGURACIONES/I_%d.txt", k_ini);
+    }else if(beta==0.8){
+    sprintf(input_file, "Resultados_simulacion/MAIN/0.80/CONFIGURACIONES/I_%d.txt", k_ini);
+    }
     vector_cociente_prob(probabilidades);
     inicializa_vectores_de_vecinos();
     lee_configuracionInicial(s, input_file);

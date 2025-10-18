@@ -1,0 +1,55 @@
+-----------VARIABLE 1-----------
+Intervalos de tiempo en los que la correlación es compatible con 0:
+
+[8, 3999]
+
+-----------VARIABLE 2-----------
+Intervalos de tiempo en los que la correlación es compatible con 0:
+
+[9, 3999]
+
+-----------VARIABLE 3-----------
+Intervalos de tiempo en los que la correlación es compatible con 0:
+
+[9, 3999]
+
+-----------VARIABLE 4-----------
+Intervalos de tiempo en los que la correlación es compatible con 0:
+
+[9, 3999]
+
+-----------VARIABLE 5-----------
+Intervalos de tiempo en los que la correlación es compatible con 0:
+
+[10, 3999]
+
+-----------VARIABLE 6-----------
+Intervalos de tiempo en los que la correlación es compatible con 0:
+
+[9, 3999]
+
+-----------VARIABLE 7-----------
+Intervalos de tiempo en los que la correlación es compatible con 0:
+
+[10, 3999]
+
+-----------VARIABLE 8-----------
+Intervalos de tiempo en los que la correlación es compatible con 0:
+
+[10, 3999]
+
+-----------VARIABLE 9-----------
+Intervalos de tiempo en los que la correlación es compatible con 0:
+
+[10, 3999]
+
+-----------VARIABLE 10-----------
+Intervalos de tiempo en los que la correlación es compatible con 0:
+
+[10, 3999]
+
+-----------VARIABLE 11-----------
+Intervalos de tiempo en los que la correlación es compatible con 0:
+
+[119, 3999]
+

@@ -706,8 +706,13 @@ void calcular_media_std(double *data, int N, double *media, double *std) {
 void crear_ventanas(int k_ini, int k_final, int N_ventana, int N_SALTO) {
     for (int k = k_ini; k <= k_final; k++) {
         char input_path[512], output_path[512];
+        if(beta ==0.72){
         sprintf(input_path, "Resultados_simulacion/TERMALIZACION/0.72/EVOLUCION/I_%d.txt", k);
         sprintf(output_path, "Resultados_simulacion/TERMALIZACION/0.72/VENTANAS/EVOLUCION/I_%d.txt", k);
+        }else if(beta ==0.8){
+        sprintf(input_path, "Resultados_simulacion/TERMALIZACION/0.80/EVOLUCION/I_%d.txt", k);
+        sprintf(output_path, "Resultados_simulacion/TERMALIZACION/0.80/VENTANAS/EVOLUCION/I_%d.txt", k);
+        };
 
         FILE *fin = fopen(input_path, "r");
         if (!fin) { printf("No se pudo abrir %s\n", input_path); continue; }
@@ -779,7 +784,11 @@ void crear_media_global(int k_ini, int k_final) {
     int num_var = 11; // número de variables
 
     char output_path[512];
+    if(beta ==0.72){
     sprintf(output_path, "Resultados_simulacion/TERMALIZACION/0.72/VENTANAS/EVOLUCION/MEDIA_%d_%d.txt", k_ini, k_final);
+    }else if(beta ==0.8){
+    sprintf(output_path, "Resultados_simulacion/TERMALIZACION/0.80/VENTANAS/EVOLUCION/MEDIA_%d_%d.txt", k_ini, k_final);
+    }
 
     FILE *fout = fopen(output_path, "w");
     if (!fout) {
@@ -789,7 +798,11 @@ void crear_media_global(int k_ini, int k_final) {
 
     // Leemos el primer archivo para determinar n y tiempos
     char first_path[512];
+    if(beta ==0.72){
     sprintf(first_path, "Resultados_simulacion/TERMALIZACION/0.72/VENTANAS/EVOLUCION/I_%d.txt", k_ini);
+    }else if(beta ==0.8){
+    sprintf(first_path, "Resultados_simulacion/TERMALIZACION/0.80/VENTANAS/EVOLUCION/I_%d.txt", k_ini);
+    }
     FILE *f0 = fopen(first_path, "r");
     if (!f0) {
         printf("No se pudo abrir %s\n", first_path);
@@ -822,7 +835,11 @@ void crear_media_global(int k_ini, int k_final) {
     // Leemos cada archivo de configuración
     for (int k = k_ini; k <= k_final; k++) {
         char path[512];
+        if(beta ==0.72){
         sprintf(path, "Resultados_simulacion/TERMALIZACION/0.72/VENTANAS/EVOLUCION/I_%d.txt", k);
+        }else if(beta ==0.8){
+        sprintf(path, "Resultados_simulacion/TERMALIZACION/0.80/VENTANAS/EVOLUCION/I_%d.txt", k);
+        }
         FILE *f = fopen(path, "r");
         if (!f) continue;
 
@@ -893,7 +910,11 @@ void crear_media_global(int k_ini, int k_final) {
 // Generación archivo de compatibilidad global
 // ----------------------------------------------------
 char compat_path[512];
+if(beta ==0.72){
 sprintf(compat_path, "Resultados_simulacion/TERMALIZACION/0.72/VENTANAS/COMPATIBILIDAD_%d_%d.txt", k_ini, k_final);
+}else if(beta ==0.8){
+sprintf(compat_path, "Resultados_simulacion/TERMALIZACION/0.80/VENTANAS/COMPATIBILIDAD_%d_%d.txt", k_ini, k_final);
+};
 FILE *fc = fopen(compat_path, "w");
 if (!fc) {
     printf("No se pudo crear %s\n", compat_path);
@@ -986,8 +1007,8 @@ void dinamica_metropolis_main(
         folder_salida  = "Resultados_simulacion/MAIN/0.72/EVOLUCION/NASIO";
         folder_param   = "Resultados_simulacion/MAIN/0.72/PARAMETROS/NASIO";
     } else if (beta == 0.8) {
-        folder_salida  = "Resultados_simulacion/MAIN/0.8/EVOLUCION/NASIO";
-        folder_param   = "Resultados_simulacion/MAIN/0.8/PARAMETROS/NASIO";
+        folder_salida  = "Resultados_simulacion/MAIN/0.80/EVOLUCION/NASIO";
+        folder_param   = "Resultados_simulacion/MAIN/0.80/PARAMETROS/NASIO";
     } else {
         printf("PON EL VALOR DE BETA QUE TOCA, AMIGO MIO\n");
     }
@@ -996,8 +1017,8 @@ void dinamica_metropolis_main(
         folder_salida  = "Resultados_simulacion/MAIN/0.72/EVOLUCION/BARRACHINA";
         folder_param   = "Resultados_simulacion/MAIN/0.72/PARAMETROS/BARRACHINA";
     } else if (beta == 0.8) {
-        folder_salida  = "Resultados_simulacion/MAIN/0.8/EVOLUCION/BARRACHINA";
-        folder_param   = "Resultados_simulacion/MAIN/0.8/PARAMETROS/BARRACHINA";
+        folder_salida  = "Resultados_simulacion/MAIN/0.80/EVOLUCION/BARRACHINA";
+        folder_param   = "Resultados_simulacion/MAIN/0.80/PARAMETROS/BARRACHINA";
     } else {
         printf("PON EL VALOR DE BETA QUE TOCA, AMIGO MIO\n");
     }
@@ -1006,8 +1027,8 @@ void dinamica_metropolis_main(
         folder_salida  = "Resultados_simulacion/MAIN/0.72/EVOLUCION/JOEL";
         folder_param   = "Resultados_simulacion/MAIN/0.72/PARAMETROS/JOEL";
     } else if (beta == 0.8) {
-        folder_salida  = "Resultados_simulacion/MAIN/0.8/EVOLUCION/JOEL";
-        folder_param   = "Resultados_simulacion/MAIN/0.8/PARAMETROS/JOEL";
+        folder_salida  = "Resultados_simulacion/MAIN/0.80/EVOLUCION/JOEL";
+        folder_param   = "Resultados_simulacion/MAIN/0.80/PARAMETROS/JOEL";
     } else {
         printf("PON EL VALOR DE BETA QUE TOCA, AMIGO MIO\n");
     }

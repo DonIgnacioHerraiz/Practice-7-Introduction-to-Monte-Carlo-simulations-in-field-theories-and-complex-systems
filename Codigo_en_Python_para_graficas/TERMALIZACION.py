@@ -1,6 +1,18 @@
 import os
 import matplotlib.pyplot as plt
 
+# CONFIGURACIÓN PARA LATEX
+plt.rcParams.update({
+    'font.size': 11,
+    'axes.titlesize': 12,
+    'axes.labelsize': 11,
+    'xtick.labelsize': 10,
+    'ytick.labelsize': 10,
+    'legend.fontsize': 10,
+    'figure.figsize': (10, 2.5),  # MÁS ANCHA Y MENOS ALTA
+    'figure.dpi': 300,
+})
+
 # Rutas
 input_file = r"Resultados_simulacion\TERMALIZACION\0.72\VENTANAS\COMPATIBILIDAD_0_19.txt"
 output_dir = r"Graficas\TERMALIZACION"
@@ -31,7 +43,7 @@ for line in lines:
 if current_I is not None:
     data[current_I] = intervals
 
-# Generar gráficos de función binaria
+# Generar gráficos de función binaria (TODAS LAS CONFIGURACIONES)
 for k, interval_list in data.items():
     tiempo = list(range(525, 40001))
     compat = [0] * len(tiempo)
@@ -41,18 +53,30 @@ for k, interval_list in data.items():
             if 525 <= t <= 40000:
                 compat[t-525] = 1
 
-    plt.figure(figsize=(15,4))
-    plt.step(tiempo, compat, where='mid', color='black', linewidth=1.5, label='f(T)')
+    fig, ax = plt.subplots(figsize=(10, 2.5))  # FORMATO HORIZONTAL
     
-    plt.ylim(-0.1, 1.1)
-    plt.xlabel("Tiempo")
-    plt.ylabel("Compatibilidad")
-    plt.title(f"Compatibilidad Global I_{k}", fontsize=14, fontweight='bold')
-    plt.grid(True, linestyle='--', alpha=0.5)
-    plt.legend(loc='upper right')
+    # Scatter plot más compacto
+    ax.scatter(tiempo, compat, color='black', s=0.5, alpha=0.8)
     
+    ax.set_ylim(-0.1, 1.1)
+    ax.set_xlabel("Tiempo (Sweeps)", fontsize=11)
+    ax.set_ylabel("Estabilidad", fontsize=11)
+    ax.set_title(f"Evolución de la estabilidad - I_{k} ($\\beta = 0.72$)", fontsize=12)
+    
+    # SOLO MOSTRAR 0 Y 1 EN EL EJE Y
+    ax.set_yticks([0, 1])
+    ax.set_yticklabels(['0', '1'])
+    
+    # Grid sutil
+    ax.grid(True, linestyle='--', alpha=0.3)
+    
+    # Ajustar márgenes
     plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, f"COMPATIBILIDAD_I_{k}.png"))
+    
+    # Guardar todas las gráficas
+    plt.savefig(os.path.join(output_dir, f"COMPATIBILIDAD_I_{k}.png"), 
+                dpi=300, bbox_inches='tight', facecolor='white')
     plt.close()
 
-print("Gráficas generadas correctamente en", output_dir)
+print(f"Todas las gráficas generadas correctamente en {output_dir}")
+print(f"Número de gráficas generadas: {len(data)}")

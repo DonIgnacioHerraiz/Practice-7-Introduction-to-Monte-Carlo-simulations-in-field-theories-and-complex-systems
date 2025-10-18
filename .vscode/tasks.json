@@ -201,7 +201,28 @@
     "type": "shell",
     "command": ".\\Codigos_en_C\\main.exe",
     "group": "test"
-}
+},{
+            "label": "compilar PRELIMINARES",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "Codigos_en_C\\Analisis_preliminar.c",
+                "-o",
+                "Codigos_en_C\\Analisis_preliminar.exe",
+                "-lm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "ejecutar PRELIMINARES",
+            "type": "shell",
+            "command": ".\\Codigos_en_C\\Analisis_preliminar.exe",
+            "group": "test"
+        },
 
     ]
 }
