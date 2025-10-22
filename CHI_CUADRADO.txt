@@ -1,0 +1,300 @@
+────────────────────────────────────────────────────────────
+ARCHIVO ANALIZADO: grafica.txt
+FECHA: 2025-10-22T10:42:34
+────────────────────────────────────────────────────────────
+
+--- CONTENIDO DEL ARCHIVO ORIGINAL ---
+Formato: N  MEDIA_N  ERR(MEDIA_N)
+1	0.83072892	0.00000316
+2	0.53472748	0.00000811
+3	0.28933249	0.00001013
+4	0.13498358	0.00000900
+5	0.05475648	0.00000659
+6	0.01938021	0.00000449
+7	0.00599555	0.00000328
+8	0.00162755	0.00000274
+9	0.00038802	0.00000250
+10	0.00007769	0.00000237
+────────────────────────────────────────
+
+N_puntos: 10
+R²: 0.79715464
+Pendiente (σ): 0.12422454
+Error de la pendiente: 0.00000221
+
+--- PARÁMETROS DEL CHI-CUADRADO ---
+χ²: 38120888.99467099
+χ² reducido (χ²/ν): 4765111.12433387
+Grados de libertad (ν): 8
+Valor p: 0.00000000
+
+--- PARÁMETROS DEL AJUSTE ---
+log(A): -0.06526573 ± 0.00000471
+A: 0.93681849
+Incertidumbre promedio de los datos: 0.00396521
+
+--- INTERPRETACIÓN DEL AJUSTE ---
+El ajuste es DEFICIENTE (χ²/ν ≥ 3)
+El ajuste NO es estadísticamente significativo (p ≤ 0.05)
+
+============================================================
+
+────────────────────────────────────────────────────────────
+ARCHIVO ANALIZADO: grafica.txt
+FECHA: 2025-10-22T10:43:34
+────────────────────────────────────────────────────────────
+
+--- CONTENIDO DEL ARCHIVO ORIGINAL ---
+Formato: N  MEDIA_N  ERR(MEDIA_N)
+2	0.53472748	0.00000811
+3	0.28933249	0.00001013
+4	0.13498358	0.00000900
+5	0.05475648	0.00000659
+6	0.01938021	0.00000449
+7	0.00599555	0.00000328
+8	0.00162755	0.00000274
+9	0.00038802	0.00000250
+10	0.00007769	0.00000237
+────────────────────────────────────────
+
+N_puntos: 9
+R²: 0.91981596
+Pendiente (σ): 0.11068959
+Error de la pendiente: 0.00000323
+
+--- PARÁMETROS DEL CHI-CUADRADO ---
+χ²: 5240750.19862993
+χ² reducido (χ²/ν): 748678.59980428
+Grados de libertad (ν): 7
+Valor p: 0.00000000
+
+--- PARÁMETROS DEL AJUSTE ---
+log(A): -0.19256779 ± 0.00002269
+A: 0.82483840
+Incertidumbre promedio de los datos: 0.00440537
+
+--- INTERPRETACIÓN DEL AJUSTE ---
+El ajuste es DEFICIENTE (χ²/ν ≥ 3)
+El ajuste NO es estadísticamente significativo (p ≤ 0.05)
+
+============================================================
+
+────────────────────────────────────────────────────────────
+ARCHIVO ANALIZADO: grafica.txt
+FECHA: 2025-10-22T10:44:07
+────────────────────────────────────────────────────────────
+
+--- CONTENIDO DEL ARCHIVO ORIGINAL ---
+Formato: N  MEDIA_N  ERR(MEDIA_N)
+3	0.28933249	0.00001013
+4	0.13498358	0.00000900
+5	0.05475648	0.00000659
+6	0.01938021	0.00000449
+7	0.00599555	0.00000328
+8	0.00162755	0.00000274
+9	0.00038802	0.00000250
+10	0.00007769	0.00000237
+────────────────────────────────────────
+
+N_puntos: 8
+R²: 0.96435354
+Pendiente (σ): 0.10242302
+Error de la pendiente: 0.00000506
+
+--- PARÁMETROS DEL CHI-CUADRADO ---
+χ²: 745585.93045982
+χ² reducido (χ²/ν): 124264.32174330
+Grados de libertad (ν): 6
+Valor p: 0.00000000
+
+--- PARÁMETROS DEL AJUSTE ---
+log(A): -0.32715425 ± 0.00006741
+A: 0.72097252
+Incertidumbre promedio de los datos: 0.00495414
+
+--- INTERPRETACIÓN DEL AJUSTE ---
+El ajuste es DEFICIENTE (χ²/ν ≥ 3)
+El ajuste NO es estadísticamente significativo (p ≤ 0.05)
+
+============================================================
+
+────────────────────────────────────────────────────────────
+ARCHIVO ANALIZADO: grafica.txt
+FECHA: 2025-10-22T10:44:32
+────────────────────────────────────────────────────────────
+
+--- CONTENIDO DEL ARCHIVO ORIGINAL ---
+Formato: N  MEDIA_N  ERR(MEDIA_N)
+4	0.13498358	0.00000900
+5	0.05475648	0.00000659
+6	0.01938021	0.00000449
+7	0.00599555	0.00000328
+8	0.00162755	0.00000274
+9	0.00038802	0.00000250
+10	0.00007769	0.00000237
+────────────────────────────────────────
+
+N_puntos: 7
+R²: 0.98313779
+Pendiente (σ): 0.09687345
+Error de la pendiente: 0.00000857
+
+--- PARÁMETROS DEL CHI-CUADRADO ---
+χ²: 100918.47926256
+χ² reducido (χ²/ν): 20183.69585251
+Grados de libertad (ν): 5
+Valor p: 0.00000000
+
+--- PARÁMETROS DEL AJUSTE ---
+log(A): -0.45829491 ± 0.00017670
+A: 0.63236096
+Incertidumbre promedio de los datos: 0.00565687
+
+--- INTERPRETACIÓN DEL AJUSTE ---
+El ajuste es DEFICIENTE (χ²/ν ≥ 3)
+El ajuste NO es estadísticamente significativo (p ≤ 0.05)
+
+============================================================
+
+────────────────────────────────────────────────────────────
+ARCHIVO ANALIZADO: grafica.txt
+FECHA: 2025-10-22T10:45:00
+────────────────────────────────────────────────────────────
+
+--- CONTENIDO DEL ARCHIVO ORIGINAL ---
+Formato: N  MEDIA_N  ERR(MEDIA_N)
+5	0.05475648	0.00000659
+6	0.01938021	0.00000449
+7	0.00599555	0.00000328
+8	0.00162755	0.00000274
+9	0.00038802	0.00000250
+10	0.00007769	0.00000237
+────────────────────────────────────────
+
+N_puntos: 6
+R²: 0.99223039
+Pendiente (σ): 0.09276229
+Error de la pendiente: 0.00001620
+
+--- PARÁMETROS DEL CHI-CUADRADO ---
+χ²: 11505.56065418
+χ² reducido (χ²/ν): 2876.39016354
+Grados de libertad (ν): 4
+Valor p: 0.00000000
+
+--- PARÁMETROS DEL AJUSTE ---
+log(A): -0.58853464 ± 0.00047003
+A: 0.55514017
+Incertidumbre promedio de los datos: 0.00658857
+
+--- INTERPRETACIÓN DEL AJUSTE ---
+El ajuste es DEFICIENTE (χ²/ν ≥ 3)
+El ajuste NO es estadísticamente significativo (p ≤ 0.05)
+
+============================================================
+
+────────────────────────────────────────────────────────────
+ARCHIVO ANALIZADO: grafica.txt
+FECHA: 2025-10-22T10:45:13
+────────────────────────────────────────────────────────────
+
+--- CONTENIDO DEL ARCHIVO ORIGINAL ---
+Formato: N  MEDIA_N  ERR(MEDIA_N)
+6	0.01938021	0.00000449
+7	0.00599555	0.00000328
+8	0.00162755	0.00000274
+9	0.00038802	0.00000250
+10	0.00007769	0.00000237
+────────────────────────────────────────
+
+N_puntos: 5
+R²: 0.99704587
+Pendiente (σ): 0.08943476
+Error de la pendiente: 0.00003623
+
+--- PARÁMETROS DEL CHI-CUADRADO ---
+χ²: 963.85888808
+χ² reducido (χ²/ν): 321.28629603
+Grados de libertad (ν): 3
+Valor p: 0.00000000
+
+--- PARÁMETROS DEL AJUSTE ---
+log(A): -0.72487532 ± 0.00140865
+A: 0.48438496
+Incertidumbre promedio de los datos: 0.00788222
+
+--- INTERPRETACIÓN DEL AJUSTE ---
+El ajuste es DEFICIENTE (χ²/ν ≥ 3)
+El ajuste NO es estadísticamente significativo (p ≤ 0.05)
+
+============================================================
+
+────────────────────────────────────────────────────────────
+ARCHIVO ANALIZADO: grafica.txt
+FECHA: 2025-10-22T10:45:37
+────────────────────────────────────────────────────────────
+
+--- CONTENIDO DEL ARCHIVO ORIGINAL ---
+Formato: N  MEDIA_N  ERR(MEDIA_N)
+7	0.00599555	0.00000328
+8	0.00162755	0.00000274
+9	0.00038802	0.00000250
+10	0.00007769	0.00000237
+────────────────────────────────────────
+
+N_puntos: 4
+R²: 0.99945460
+Pendiente (σ): 0.08654895
+Error de la pendiente: 0.00010165
+
+--- PARÁMETROS DEL CHI-CUADRADO ---
+χ²: 40.52248201
+χ² reducido (χ²/ν): 20.26124100
+Grados de libertad (ν): 2
+Valor p: 0.00000000
+
+--- PARÁMETROS DEL AJUSTE ---
+log(A): -0.87615476 ± 0.00517396
+A: 0.41638092
+Incertidumbre promedio de los datos: 0.00979485
+
+--- INTERPRETACIÓN DEL AJUSTE ---
+El ajuste es DEFICIENTE (χ²/ν ≥ 3)
+El ajuste NO es estadísticamente significativo (p ≤ 0.05)
+
+============================================================
+
+────────────────────────────────────────────────────────────
+ARCHIVO ANALIZADO: grafica.txt
+FECHA: 2025-10-22T10:45:57
+────────────────────────────────────────────────────────────
+
+--- CONTENIDO DEL ARCHIVO ORIGINAL ---
+Formato: N  MEDIA_N  ERR(MEDIA_N)
+8	0.00162755	0.00000274
+9	0.00038802	0.00000250
+10	0.00007769	0.00000237
+────────────────────────────────────────
+
+N_puntos: 3
+R²: 0.99999481
+Pendiente (σ): 0.08436776
+Error de la pendiente: 0.00035753
+
+--- PARÁMETROS DEL CHI-CUADRADO ---
+χ²: 0.03082809
+χ² reducido (χ²/ν): 0.03082809
+Grados de libertad (ν): 1
+Valor p: 0.86062446
+
+--- PARÁMETROS DEL AJUSTE ---
+log(A): -1.02112604 ± 0.02336251
+A: 0.36018913
+Incertidumbre promedio de los datos: 0.01287745
+
+--- INTERPRETACIÓN DEL AJUSTE ---
+El ajuste es EXCELENTE (χ²/ν < 1)
+El ajuste es estadísticamente significativo (p > 0.05)
+
+============================================================
+
