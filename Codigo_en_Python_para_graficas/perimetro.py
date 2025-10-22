@@ -33,13 +33,13 @@ logA_fit, nu_fit = popt_log
 perr_log = np.sqrt(np.diag(pcov_log))  # Errores de los parámetros
 
 # Ploteo los datos con error bars en escala logarítmica
-plt.errorbar(n, log_wilson, yerr=error_log_wilson, fmt='o', label=f'Datos de simulación (Ajuste: log(A)={logA_fit:.3f}±{perr_log[0]:.3f}, μ={nu_fit:.3f}±{perr_log[1]:.3f})', color='blue', ecolor='lightgray', elinewidth=3, capsize=0)
+plt.errorbar(n, log_wilson, yerr=error_log_wilson, fmt='o', label=f'Datos de simulación (Ajuste: log(A)={logA_fit:.3f}, μ={nu_fit:.3f})', color='blue', ecolor='lightgray', elinewidth=3, capsize=0)
 # Ploteo la función teórica ajustada
 plt.plot(ENE, funcion_teorica_log(np.array(ENE), *popt_log), label='Función teórica ajustada', color='red')
 # Añado etiquetas y leyenda
-plt.xlabel('Tamaño del sistema n')
-plt.ylabel('Logaritmo del promedio Wilson')
-plt.title('Promedio Wilson vs Tamaño del sistema (escala log)')
+plt.xlabel('n')
+plt.ylabel(r'$\log\langle W \rangle$')
+plt.title(r'$\log\langle W \rangle$(n)')
 plt.legend(loc='upper right')
 # Guardo la gráfica
 if not os.path.exists('Graficas'):
@@ -57,13 +57,13 @@ A_fit, nu_fit_normal = popt_normal
 perr_normal = np.sqrt(np.diag(pcov_normal))  # Errores de los parámetros
 
 # Ploteo los datos con error bars en escala normal
-plt.errorbar(n, wilson_normal, yerr=error_wilson_normal, fmt='o', label=f'Datos de simulación (Ajuste: A={A_fit:.3f}±{perr_normal[0]:.3f}, μ={nu_fit_normal:.3f}±{perr_normal[1]:.3f})', color='blue', ecolor='lightgray', elinewidth=3, capsize=0)
+plt.errorbar(n, wilson_normal, yerr=error_wilson_normal, fmt='o', label=f'Datos de simulación (Ajuste: A={A_fit:.3f}, μ={nu_fit_normal:.3f})', color='blue', ecolor='lightgray', elinewidth=3, capsize=0)
 # Ploteo la función teórica ajustada
 plt.plot(ENE, funcion_teorica_normal(np.array(ENE), *popt_normal), label='Función teórica ajustada', color='red')
 # Añado etiquetas y leyenda
-plt.xlabel('Tamaño del sistema n')
-plt.ylabel('Promedio Wilson')
-plt.title('Promedio Wilson vs Tamaño del sistema (escala normal)')
+plt.xlabel('n')
+plt.ylabel(r'$\langle W \rangle$')
+plt.title(r'$\langle W \rangle$(n)')
 plt.legend(loc='upper right')
 # Guardo la gráfica
 plt.savefig('Graficas/MAIN/0.80/perimetro.png')
