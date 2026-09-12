@@ -1,0 +1,10 @@
+L	24
+J	1.000000
+beta	0.720000
+estado_inicial	cold
+N_sweps_entre_medidas	1
+N_medidas	5000
+Tiempo_total(s)	129.840000
+ - Metropolis: 4.12 s (3.2%)
+ - Cálculos: 125.69 s (96.8%)
+ - I/O: 0.03 s (0.0%)

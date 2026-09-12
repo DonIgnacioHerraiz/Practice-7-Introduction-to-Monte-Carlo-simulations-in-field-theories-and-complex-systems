@@ -1,0 +1,75 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
+import os
+import glob
+
+# --- Excluir ciertos valores de n ---
+valores_excluir = [1, 2]  # valores de n que no quieres mostrar ni usar
+
+# --- Función exponencial a ajustar ---
+def exp_func(n, A, sigma):
+    # Evitar overflow numérico
+    return A * np.exp(-np.clip(sigma * n**2, 0, 700))
+
+# --- Rutas ---
+input_folder = "Resultados_simulacion/PROMEDIOS_WILSON"
+output_folder = "Graficas/PROMEDIOS_WILSON"
+
+# Crear carpeta de salida si no existe
+os.makedirs(output_folder, exist_ok=True)
+
+# --- Buscar todos los ficheros I_*.txt ---
+file_list = sorted(glob.glob(os.path.join(input_folder, "I_*.txt")))
+
+if not file_list:
+    print("No se encontraron archivos con el patrón I_*.txt en la carpeta especificada.")
+else:
+    for file_path in file_list:
+        base_name = os.path.splitext(os.path.basename(file_path))[0]  # Ej: I_0
+
+        # Cargar datos
+        data = np.loadtxt(file_path)
+        n = data[:, 0]
+        values = np.fabs(data[:, 1:])
+
+        # --- Aplicar máscara para excluir n = 1 y n = 2 ---
+        mask = ~np.isin(n, valores_excluir)
+        n = n[mask]
+        values = values[mask, :]
+
+        # --- Calcular promedios solo de los datos restantes ---
+        averages = np.mean(values, axis=1)
+
+        # --- Ajustar función exponencial al promedio ---
+        popt, pcov = curve_fit(exp_func, n, averages)
+        A, sigma = popt
+
+        # --- Crear gráfica ---
+        plt.figure(figsize=(10, 6))
+
+        # Dibujar todos los valores individuales (no promedios)
+        for i in range(values.shape[1]):
+            plt.scatter(n, values[:, i], color='blue', alpha=0.4, label='Datos individuales' if i == 0 else "")
+
+        # Dibujar el ajuste sobre los promedios
+        n_fine = np.linspace(min(n), max(n), 500)
+        plt.plot(
+            n_fine, exp_func(n_fine, A, sigma),
+            color='red',
+            label=f'Ajuste: $A \\cdot e^{{-\\sigma n^2}}$\n$A={A:.4f}, \\sigma={sigma:.4f}$'
+        )
+
+        plt.xlabel('n')
+        plt.ylabel('Valores')
+        plt.title(f'Ajuste de $A \\cdot e^{{-\\sigma n^2}}$ ({base_name})')
+        plt.legend()
+        plt.grid()
+
+        # Guardar la gráfica
+        output_file = os.path.join(output_folder, f"{base_name}.png")
+        plt.savefig(output_file)
+        plt.close()
+
+        print(f"Gráfica guardada como {output_file}")
+

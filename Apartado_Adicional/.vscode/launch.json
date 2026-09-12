@@ -1,0 +1,24 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": "c:/Users/joelg/OneDrive/Escritorio/TFIII/A7/Practice-7-Introduction-to-Monte-Carlo-simulations-in-field-theories-and-complex-systems/Codigos_en_C",
+      "program": "c:/Users/joelg/OneDrive/Escritorio/TFIII/A7/Practice-7-Introduction-to-Monte-Carlo-simulations-in-field-theories-and-complex-systems/Codigos_en_C/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}

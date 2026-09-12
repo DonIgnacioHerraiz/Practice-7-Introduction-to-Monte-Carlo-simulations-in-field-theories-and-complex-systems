@@ -1,0 +1,78 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
+import os
+import glob
+
+# --- Excluir ciertos valores de n ---
+valores_excluir = [1, 2, 3]  # valores de n que no quieres mostrar ni usar
+
+# --- Función exponencial a ajustar ---
+def exp_func(n, A, sigma):
+    return A * np.exp(-sigma * n**2)
+
+# --- Rutas ---
+input_folder = "Resultados_simulacion/PROMEDIOS_WILSON"
+output_folder = "Graficas/PROMEDIO_PROMEDIOS_WILSON"
+
+# Crear carpeta de salida si no existe
+os.makedirs(output_folder, exist_ok=True)
+
+# --- Buscar todos los ficheros I_*.txt ---
+file_list = sorted(glob.glob(os.path.join(input_folder, "I_*.txt")))
+
+if not file_list:
+    print("No se encontraron archivos con el patrón I_*.txt en la carpeta especificada.")
+else:
+    for file_path in file_list:
+        base_name = os.path.splitext(os.path.basename(file_path))[0]  # Ej: I_0
+
+        # Cargar datos
+        data = np.loadtxt(file_path)
+        n = data[:, 0]
+        values = np.fabs(data[:, 1:])
+
+        # Calcular promedios y desviaciones estándar de cada fila
+        averages = np.mean(values, axis=1)
+        std_devs = np.std(values, axis=1)
+
+        # --- Aplicar máscara para excluir ciertos valores de n ---
+        mask = ~np.isin(n, valores_excluir)
+        n = n[mask]
+        averages = averages[mask]
+        std_devs = std_devs[mask]
+
+        # Ajustar función exponencial a los promedios
+        popt, pcov = curve_fit(exp_func, n, averages)
+        A, sigma = popt
+
+        # --- Crear gráfica ---
+        plt.figure(figsize=(10, 6))
+
+        # Promedios con barras de error
+        plt.errorbar(
+            n, averages, yerr=std_devs,
+            fmt='o', capsize=5, color='blue', ecolor='black',
+            label='Promedio ± desviación estándar'
+        )
+
+        # Curva ajustada
+        n_fine = np.linspace(min(n), max(n), 500)
+        plt.plot(
+            n_fine, exp_func(n_fine, A, sigma),
+            color='red',
+            label=f'Ajuste: $A \\cdot e^{{-\\sigma n^2}}$\n$A={A:.4f}, \\sigma={sigma:.4f}$'
+        )
+
+        plt.xlabel('n')
+        plt.ylabel('Valor promedio')
+        plt.title(f'Ajuste de $A \\cdot e^{{-\\sigma n^2}}$ a los promedios ({base_name})')
+        plt.legend()
+        plt.grid(True, linestyle='--', alpha=0.6)
+
+        # Guardar la gráfica
+        output_file = os.path.join(output_folder, f"{base_name}.png")
+        plt.savefig(output_file, bbox_inches='tight')
+        plt.close()
+
+        print(f"Gráfica guardada como {output_file}")

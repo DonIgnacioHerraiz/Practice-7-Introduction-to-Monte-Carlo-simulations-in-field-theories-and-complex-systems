@@ -1,0 +1,304 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "compilar programa de la ley del area",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "Codigos_en_C\\funciones_dinamica.c",
+                "Codigos_en_C\\funciones_red.c",
+                "Codigos_en_C\\random.c",
+                "Codigos_en_C\\ley_area.c",
+                "-o",
+                "Codigos_en_C\\ley_area.exe",
+                "-lm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "ejecutar programa ley del area",
+            "type": "shell",
+            "command": ".\\Codigos_en_C\\ley_area.exe",
+            "group": "test"
+        },
+        {
+            "label": "compilar test simetria ising-gauge ENERGIA",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-ICodigos_en_C",
+                "Codigos_en_C\\funciones_dinamica.c",
+                "Codigos_en_C\\funciones_red.c",
+                "Codigos_en_C\\random.c",
+                "TESTS\\simetria_gauge_energia.c",
+                "-o",
+                "TESTS\\simetria_gauge_energia.exe",
+                "-lm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "ejecutar test simetria ising-gauge ENERGIA",
+            "type": "shell",
+            "command": ".\\TESTS\\simetria_gauge_energia.exe",
+            "group": "test"
+        },
+        {
+            "label": "compilar test vectores",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-ICodigos_en_C",
+                "Codigos_en_C\\funciones_dinamica.c",
+                "Codigos_en_C\\funciones_red.c",
+                "Codigos_en_C\\random.c",
+                "TESTS\\test_vectores.c",
+                "-o",
+                "TESTS\\test_vectores.exe",
+                "-lm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "ejecutar test vectores",
+            "type": "shell",
+            "command": ".\\TESTS\\test_vectores.exe",
+            "group": "test"
+        },
+        {
+            "label": "compilar test de temperatura cero",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-ICodigos_en_C",
+                "Codigos_en_C\\funciones_dinamica.c",
+                "Codigos_en_C\\funciones_red.c",
+                "Codigos_en_C\\random.c",
+                "TESTS\\temperatura_cero.c",
+                "-o",
+                "TESTS\\temperatura_cero.exe",
+                "-lm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "ejecutar test de temperatura cero",
+            "type": "shell",
+            "command": ".\\TESTS\\temperatura_cero.exe",
+            "group": "test"
+        },        {
+            "label": "compilar test simetria ising-gauge PLAQUETAS",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-ICodigos_en_C",
+                "Codigos_en_C\\funciones_dinamica.c",
+                "Codigos_en_C\\funciones_red.c",
+                "Codigos_en_C\\random.c",
+                "TESTS\\simetria_gauge_plaqueta.c",
+                "-o",
+                "TESTS\\simetria_gauge_plaqueta.exe",
+                "-lm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },{
+            "label": "ejecutar test simetria ising-gauge PLAQUETAS",
+            "type": "shell",
+            "command": ".\\TESTS\\simetria_gauge_plaqueta.exe",
+            "group": "test"
+        },
+        {
+            "label": "compilar programa de la TERMALIZACION",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "Codigos_en_C\\funciones_dinamica.c",
+                "Codigos_en_C\\funciones_red.c",
+                "Codigos_en_C\\random.c",
+                "Codigos_en_C\\termalizacion.c",
+                "-o",
+                "Codigos_en_C\\termalizacion.exe",
+                "-lm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "ejecutar programa termalizacion",
+            "type": "shell",
+            "command": ".\\Codigos_en_C\\termalizacion.exe",
+            "group": "test"
+        },{
+            "label": "compilar programa de la CORRELACION",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "Codigos_en_C\\funciones_dinamica.c",
+                "Codigos_en_C\\funciones_red.c",
+                "Codigos_en_C\\random.c",
+                "Codigos_en_C\\correlacion.c",
+                "-o",
+                "Codigos_en_C\\correlacion.exe",
+                "-lm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "ejecutar programa CORRELACION",
+            "type": "shell",
+            "command": ".\\Codigos_en_C\\correlacion.exe",
+            "group": "test"
+        },{
+    "label": "compilar MAIN",
+    "type": "shell",
+    "command": "gcc",
+    "args": [
+        "Codigos_en_C\\funciones_dinamica.c",
+        "Codigos_en_C\\funciones_red.c",
+        "Codigos_en_C\\random.c",
+        "Codigos_en_C\\main.c",
+        "-O2",
+        "-o",
+        "Codigos_en_C\\main.exe",
+        "-lm"
+    ],
+    "group": {
+        "kind": "build",
+        "isDefault": true
+    },
+    "problemMatcher": ["$gcc"]
+},
+{
+    "label": "ejecutar MAIN",
+    "type": "shell",
+    "command": ".\\Codigos_en_C\\main.exe",
+    "group": "test"
+},{
+    "label": "compilar promedios_errores",
+    "type": "shell",
+    "command": "gcc",
+    "args": [
+        "Codigos_en_C\\promedios_errores.c",
+        "-O2",
+        "-o",
+        "Codigos_en_C\\promedios_errores.exe",
+        "-lm"
+    ],
+    "group": {
+        "kind": "build",
+        "isDefault": true
+    },
+    "problemMatcher": ["$gcc"]
+},
+{
+    "label": "ejecutar promedios_errores",
+    "type": "shell",
+    "command": ".\\Codigos_en_C\\promedios_errores.exe",
+    "group": "test"
+},        {
+            "label": "compilar test productos igual a 1",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-ICodigos_en_C",
+                "Codigos_en_C\\funciones_dinamica.c",
+                "Codigos_en_C\\funciones_red.c",
+                "Codigos_en_C\\random.c",
+                "TESTS\\producto_igual_1.c",
+                "-o",
+                "TESTS\\producto_igual_1.exe",
+                "-lm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },{
+            "label": "ejecutar test productos igual a 1",
+            "type": "shell",
+            "command": ".\\TESTS\\producto_igual_1.exe",
+            "group": "test"
+        },
+        {
+            "label": "compilar TEST_funcionesred",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "Codigos_en_C\\funciones_red.c",
+                "Codigos_en_C\\random.c",
+                "Codigos_en_C\\funciones_dinamica.c",
+                "Codigos_en_C\\tests_funcionesred.c",
+                "-o",
+                "Codigos_en_C\\tests_funcionesred.exe",
+                "-lm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "ejecutar TEST_funcionesred",
+            "type": "shell",
+            "command": ".\\Codigos_en_C\\tests_funcionesred.exe",
+            "group": "test"
+        },{
+            "label": "compilar TEST_variable_O",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-I", "Codigos_en_C",  // <--- IMPORTANTE: Para que encuentre los .h
+                "Codigos_en_C\\funciones_red.c",
+                "Codigos_en_C\\random.c",
+                "Codigos_en_C\\funciones_dinamica.c",
+                "TESTS\\test_nueva_variable.c",
+                "-o",
+                "TESTS\\test_nueva_variable.exe",
+                "-lm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "ejecutar TEST_variable_O",
+            "type": "shell",
+            "command": ".\\TESTS\\test_nueva_variable.exe",
+            "group": "test"
+        }
+
+    ]
+}
+
