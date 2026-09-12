@@ -1,81 +1,74 @@
-CUESTION DE NOTACION:
+# SIMULACIÓN DE UN SISTEMA ISING-GAUGE 3D 
 
-Recordar que cada arista, en consonancia con los apuntes de Follana, se denota por (n,x), siendo n un natural que especifica a un nodo y x un vector unitario en una de las 3 direcciones posibles.
-
-Además, notar que cada plaqueta puede ser especificada por un entero n y dos vectores x,y. Así, denotaremos por (n,x,y) a cada plaqueta.
-
-
-# Codificación del Sistema
-
-En el modelo de Ising almacenamos toda la información en un único array unidimensional.
-Cada nodo de la red estaba asociado a un único espín, de modo que para una red cúbica 3D de lado L
-se necesitaba un array de tamaño L^3.
-
-En el Ising Gauge la situación cambia ligeramente, aunque mantendremos la etiquetacion de los nodos. 
-Así, si nos imaginamos una red cubica de lado L, asignaremos a cada nodo un numero n, que se relaciona 
-con sus tres coordenadas de una red cubica a traves de:
-
-n=x +L*y+L^2z
-
-donde las tres coordenadas pueden tomar los valores enteros comprendidos entre 0 y L-1.
-
-En Ising-Gauge, los espines están definidos en las aristas, y para representarlos buscamos 
-primero una asignación suprayectiva de nodos → aristas. Una manera natural de hacerlo es asignar a 
-cada nodo n las tres aristas de la forma (n, α), donde α es un vector positivo de la base (x, y, z). 
-Esta construcción garantiza que la asignación sea efectivamente suprayectiva.
-
-Con esta correspondencia definida, organizamos el array de la red siguiendo el patrón:
-
-(1,x ; 1,y ; 1,z ; 2,x ; 2,y ; 2,z ; …)
-
-De este modo, cada nodo contribuye con tres posiciones consecutivas en el array,
-correspondientes a los espines de las tres aristas que lo contienen y están orientadas
-en sentido positivo.
-
-Al igual que con las aristas, vamos a codificar las plaquetas de alguna forma. Al igual que en el caso anterior,
-debemos buscar una asignación sobreyectiva nodos→ plaquetas. La idea es asociar a cada nodo 3 plaquetas: la generado
-por n,alfa,beta, siendo alfa y beta los posibles (x,y,z). De esta forma, al igual que ocurria con las aristas, tendremos 
-3*L^2 plaquetas, que codificaremos en un array de tamaño 3N con el siguiente patrón:
-
-( (1,x,y) ;    (1,x,z)   ;    (1,y,z)   ;   (2,x,y)     ;     (2,x,z)   ;    (2,y,z)  ...)
+Curso: 2025/2026
+Asignatura: Técnicas Físicas III
+Autores:
+    - Ignacio Herraiz
+    - David Barrachina
+    - Joel Gracia
 
 
-# Organizacion del Github
-Una vez dicho como codificamos las aristas y las plaquetas, pasamos a describir como se va a organizar el github. La estructura general 
-sigue siendo la misma que en la practica 5, por lo que alguna explicacion se obvia:
+## OBJETIVOS
 
-Codigos en C: Dividimos el codigo del siguiente modo:
+Este proyecto se divide en dos partes. La primera de ellas es entender el funcionamiento de un
+sistema Ising-Gauge en 3 dimensiones, para poder programar un código en C/C++ que nos permita
+comprobar dos leyes fundamentales que rigen estos sistemas: la Ley del Área y la Ley del Perímetro.
 
-funciones_red.c: Aqui escribiremos todas las funciones relativas al manejo de los arrays de plaquetas y aristas
+Después, se trató de definir unas nuevas variables del sistema, que nos permitiesen reproducir de 
+nuevo estos resultados pero reduciendo los errores estadísticos.
 
-dinamica.c: Aqui escribiremos el "main" con el que generaremos las configuraciones termalizadas mediante el algoritmo de metropolis
+## MÉTODOLOGÍA
 
-funciones_dinamica.c: Aqui crearemos las funciones utilizadas en dinamica.c
+### LEYES DEL ÁREA Y DEL PERÍMETRO
 
-analisis.c: Aqui escribiremos el "main" con el que analizaremos las configuraciones creadas en dinamica.c
+El sistema Ising-Gauge se basa en una red cúbica que asigna un valor +1 o -1 a cada una de las aristasde esta red. Por tanto, si tenemos V vértices en el cubo, tendremos 3V aristas. Codificamos losvalores de las aristas en un array de una dimensión. Implementamos también una función que nos indica cuáles son los vecinos de cada vértice, para poder añadir interacciones entre aristas. Implementamos una gran cantidad de test para comprobar cada una de las funciones que incluíamos, los cuales se pueden encontrar en la carpeta /TESTS. 
 
-funciones_analisis.c: obvio   (͡° ͜ʖ ͡°)
+La evolución de los valores de las aristas se lleva a cabo mediante una simulación de Monte Carlo, en la que implementamos el algoritmo de Metropolis. Con este algoritmo actualizamos de golpe un 'sweep'(un sweep representa la cantidad total de variables a actualizar). Antes de tomar medidas en elsistema se realiza un proceso de termalización, para que el sistema se encuentre lo más cerca delequilibrio posible.
 
-A continuación, os describo algunas de las funciones que YA se me han ocurrido escribir en cada fichero:
+Para la comprobación de las leyes comentadas, necesitamos calcular el valor de los Wilson loops, paradespués poder hacer promedios estadísticos. Aquí surgen varias preguntas que deben ser resueltasdurante el trabajo: ¿Es mejor hacer un barrido de las aristas secuencial o random? ¿Calculamos todoslos loops o calculamos un número reducido de ellos?...
 
 
-funciones_dinamica.c: 
+### NUEVO OBSERVABLE
 
-- void condiciones_iniciales(int N, int *aristas, int flag)
-- int arista_aleatoria(int N)
-- void cocientes_prob(int N, double J, double betta, double *cocientes)
-- int delta_E(int arista_aleatoria,int *plaquetas)
-- double EL_cociente(int delta_E, double *cocientes)
-- int un_paso_metropolis(int *aristas, int *plaquetas, double *cocientes)
+Definimos un nuevo observable distinto a los Wilson loops, el cual debe permitirnos repetir el mismo análisis de las leyes del área y del perímetro, pero reduciendo los errores estadísticos que obtuvimosen la primera parte.
 
-funciones_red:
-- plaqueta_xy(int Nodo, int N)
-- plaqueta_xz(int Nodo, int N)
-- plaqueta_yz(int Nodo, int N)
-- void coordenadas_nodo(int N, int Nodo, int*x, int *y, int *z)
-- int numero_nodo(int N, int x, int y, int z)
-- dame_plaquetas(int *nodos, int *plaquetas)
--
+Adaptamos todas las funciones a esta nueva variable y repetimos el mismo análisis. 
+
+## TECNOLOGÍAS
+
+    - Todos los códigos de la simulación estan escritos en C/C++.
+    - Todos los gráficos los obtenemos mediante scripts en Python.
+
+## ESTRUCTURA
+
+    - Tenemos una carpeta de TESTS donde fuimos probando funciones antes de implementarlas en el main.
+    - En la carpeta /.vscode tenemos un fichero tasks.json con las posibles acciones: compilar/ejecutar los test, compilar/ejecutar el main...
+    - La segunda parte del proyecto se encuentra en la carpeta /Apartado-adicional.
+
+## RESULTADOS
+
+En la primera parte del trabajo, primeramente atajamos las preguntas sobre cual era la forma óptima de llevar a cabo las simulaciones. Vimos que lo mejor era que en el algoritmo de Metropolis hiciesemos un barrido secuencial de las aristas. Además al observar los tiempos de ejecución, nos dimos cuenta que el programa pasaba la mayor parte del tiempo en la dinamica de Metrópolis, en lugar de en el cálculo de los observables. Por tanto, decidimos que lo mejor era calcular la totalidad de los Wilson loops, para así además tener una mejor estadística. 
+
+También, llevamos a cabo un análisis de la correlación temporal, para ver cuánto tiempo tenemos que dejar evolucionar al sistema para obtener medidas independientes unas de otras. Vimos que para la ley del área necesitabamos 25 sweeps y para la del perímetro 20.
+
+En cuanto a la termalización del sistema, vimos que no era necesaria una termalización muy larga, transcurridos unos pocos sweeps, el sistema ya se encontraba cercano al equilibrio.
+
+![Termalizacion](Termalizacion.png)
+
+Además comprobamos tanto la Ley del Área como la Ley del Perímetro. La primera de ellas, vimos como requería una cantidad mucho mayor de datos para ser comprobada, y aun así seguía siendo difícil de observar con los recursos de los que disponemos.
+
+![Ley del Area](Ley_Area.png)
+
+![Ley del Perimetro](Ley_Perimetro.png)
+
+Finalmente, con la nueva variable que hemos definido, las leyes vuelven a verificarse, y los errores se han reducido, en el peor de los casos, en un factor 3.
+
+![Comparacion Errores](Comparacion_Variables.png) 
 
 
 
+## CONTRIBUCIONES
+
+    - El desarrollo teórico y la validación analítica de la nueva variable fueron llevados a cabo por Ignacio
+    - La implementación del código de la primera parte del proyecto, junto con las simulaciones correspondientes, fueron llevadas a cabo por los 3 integrantes indistintamente.
+    - La implementación de la segunda parte del proyecto fue llevada a cabo, principalmente por David y Joel.
